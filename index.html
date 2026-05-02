@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="description" content="Escáner de Capas: La Matriz de Pulver - PWA Educativa IDC">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Simbolismo en el Espacio | IDC - AAPV</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<style>
+:root{--bg-primary:#0a0a0a;--bg-secondary:#141414;--bg-panel:#1a1a1a;--accent:#00ff88;--accent-secondary:#00cc6a;--text-primary:#e0e0e0;--text-secondary:#888;--danger:#ff4444;--warning:#ffaa00;--info:#00aaff;--border:#2a2a2a;}
+*{box-sizing:border-box}
+body{background:var(--bg-primary);color:var(--text-primary);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;overflow-x:hidden;min-height:100vh;margin:0;transition:all .5s ease}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+#g-tip{position:fixed;z-index:9999;background:rgba(10,10,10,0.95);border:1px solid var(--accent);border-radius:8px;padding:12px;max-width:300px;font-size:0.85rem;color:var(--text-primary);box-shadow:0 5px 25px rgba(0,0,0,0.6);backdrop-filter:blur(10px);pointer-events:none;opacity:0;transition:opacity .2s;transform:translate(-50%,-100%);margin-top:-12px}
+#g-tip.visible{opacity:1}
+#g-tip h6{color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:700}
+#g-tip p{margin:0;line-height:1.5}
+#g-tip::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--accent)}
+#g-tip.below{transform:translate(-50%,12px);margin-top:0}
+#g-tip.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--accent)}
+#register-screen{position:fixed;inset:0;z-index:10000;background:#000;display:flex;align-items:center;justify-content:center;padding:20px}
+.register-box{background:var(--bg-panel);border:1px solid var(--border);border-radius:16px;padding:40px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.8)}
+.register-box h2{font-family:'Courier New',monospace;color:var(--accent);font-size:1.3rem;margin-bottom:8px;text-align:center}
+.register-box .subtitle{color:var(--text-secondary);font-size:.85rem;text-align:center;margin-bottom:28px}
+.register-box .form-label{font-size:.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.register-box .form-control{background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-size:.9rem}
+.register-box .form-control:focus{background:var(--bg-primary);border-color:var(--accent);color:var(--text-primary);box-shadow:0 0 0 3px rgba(0,255,136,0.1)}
+.register-box .invalid-feedback{font-size:.8rem}
+.register-box .btn-agency{width:100%;margin-top:10px}
+#boot-screen{position:fixed;inset:0;z-index:9999;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;font-family:'Courier New',monospace}
+.boot-text{color:var(--accent);font-size:14px;max-width:600px;width:90%;line-height:1.8}
+.boot-line{opacity:0;animation:typeIn .1s forwards}
+@keyframes typeIn{to{opacity:1}}
+.app-container{display:none;min-height:100vh;padding-bottom:80px}
+.agency-header{background:linear-gradient(180deg,rgba(0,0,0,0.95) 0%,rgba(20,20,20,0.9) 100%);border-bottom:1px solid var(--accent);padding:12px 20px;position:sticky;top:0;z-index:1000;backdrop-filter:blur(10px)}
+.agency-logo{font-family:'Courier New',monospace;font-weight:bold;font-size:1.1rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+.status-indicator{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:6px;box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.nav-pills .nav-link{color:var(--text-secondary);border:1px solid transparent;margin:0 4px;border-radius:8px;font-size:.85rem;padding:8px 16px;transition:all .3s}
+.nav-pills .nav-link.active{background:rgba(0,255,136,0.15);color:var(--accent);border-color:var(--accent);box-shadow:0 0 15px rgba(0,255,136,0.2)}
+.nav-pills .nav-link:hover:not(.active){border-color:var(--border);color:var(--text-primary)}
+.case-card{background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .4s cubic-bezier(0.4,0,0.2,1);cursor:pointer;position:relative}
+.case-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 10px 40px rgba(0,255,136,0.1)}
+.case-card .poster-container{position:relative;overflow:hidden;aspect-ratio:2/3;background:#000}
+.case-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.case-card:hover img{transform:scale(1.05)}
+.case-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.case-number{position:absolute;top:12px;left:12px;background:var(--accent);color:#000;font-weight:bold;font-size:.7rem;padding:4px 10px;border-radius:4px;font-family:'Courier New',monospace}
+.case-status{position:absolute;top:12px;right:12px;font-size:1.2rem}
+.progress-micro{height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden}
+.progress-micro-bar{height:100%;background:var(--accent);border-radius:2px;transition:width .5s;width:0%}
+.analysis-view{display:none;animation:fadeIn .5s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
+.panel-side{background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;padding:20px;height:fit-content}
+.panel-label{font-family:'Courier New',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.stage-wrap{position:relative;width:100%;border-radius:12px;overflow:visible}
+.stage-img-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;border:2px solid var(--border);background:#000;line-height:0;cursor:crosshair}
+.stage-img-wrap img{width:100%;display:block}
+.stage-img-wrap.insert-mode{border-color:var(--accent);box-shadow:0 0 20px rgba(0,255,136,0.2)}
+.stage-img-wrap.insert-mode::after{content:'MODO INSERCION: Haga clic sobre el afiche';position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:var(--accent);font-family:'Courier New',monospace;font-size:.7rem;padding:6px 14px;border-radius:4px;border:1px solid var(--accent);z-index:10;pointer-events:none}
+.hs-user{position:absolute;width:36px;height:36px;border-radius:50%;background:rgba(0,255,136,0.3);border:2px solid var(--accent);cursor:grab;z-index:100;transform:translate(-50%,-50%);transition:all .3s;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,255,136,0.3)}
+.hs-user:hover{background:rgba(0,255,136,0.6);transform:translate(-50%,-50%) scale(1.2);box-shadow:0 0 25px rgba(0,255,136,0.5)}
+.hs-user::after{content:attr(data-num);width:20px;height:20px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#000}
+.hs-user.solved{background:rgba(0,255,136,0.85);border-color:#000}
+.hs-user.solved::after{background:#000;color:var(--accent)}
+.hs-user.dragging{cursor:grabbing;z-index:200;opacity:.8}
+.hs-user .hs-delete{position:absolute;top:-8px;right:-8px;width:18px;height:18px;background:var(--danger);border-radius:50%;display:none;align-items:center;justify-content:center;color:#fff;font-size:10px;cursor:pointer;border:1px solid #fff}
+.hs-user:hover .hs-delete{display:flex}
+.pulver-overlay{position:absolute;inset:0;pointer-events:none;z-index:3;opacity:0;transition:opacity .3s}
+.pulver-overlay.visible{opacity:1}
+.pulver-zone-ref{position:absolute;display:flex;align-items:center;justify-content:center;font-family:'Courier New',monospace;font-size:.55rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);border:1px dashed rgba(255,255,255,0.15)}
+.pulver-zone-ref.center{top:35%;left:35%;width:30%;height:30%;border-radius:50%;border-color:rgba(255,215,0,0.2);color:rgba(255,215,0,0.3)}
+.pulver-zone-ref.top{top:0;left:20%;width:60%;height:20%;border-radius:0 0 50% 50%}
+.pulver-zone-ref.bottom{bottom:0;left:20%;width:60%;height:20%;border-radius:50% 50% 0 0}
+.pulver-zone-ref.left{top:20%;left:0;width:20%;height:60%;border-radius:0 50% 50% 0}
+.pulver-zone-ref.right{top:20%;right:0;width:20%;height:60%;border-radius:50% 0 0 50%}
+.pulver-zone-ref.top-left{top:0;left:0;width:30%;height:30%;border-radius:0 0 50% 0}
+.pulver-zone-ref.top-right{top:0;right:0;width:30%;height:30%;border-radius:0 0 0 50%}
+.pulver-zone-ref.bottom-left{bottom:0;left:0;width:30%;height:30%;border-radius:0 50% 0 0}
+.pulver-zone-ref.bottom-right{bottom:0;right:0;width:30%;height:30%;border-radius:50% 0 0 0}
+.btn-overlay-toggle{position:absolute;top:10px;right:10px;z-index:50;background:rgba(0,0,0,0.7);border:1px solid var(--border);color:var(--text-secondary);font-size:.65rem;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'Courier New',monospace}
+.btn-overlay-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.protocol-step{background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;transition:all .3s;position:relative;overflow:hidden}
+.protocol-step::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border);transition:background .3s}
+.protocol-step.completed::before{background:var(--accent)}
+.protocol-step.completed{border-color:rgba(0,255,136,0.3)}
+.step-number{width:28px;height:28px;border-radius:50%;background:var(--bg-primary);border:2px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:bold;margin-right:10px;transition:all .3s}
+.protocol-step.completed .step-number{background:var(--accent);color:#000;border-color:var(--accent)}
+.form-control,.form-select{background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-size:.9rem}
+.form-control:focus,.form-select:focus{background:var(--bg-primary);border-color:var(--accent);color:var(--text-primary);box-shadow:0 0 0 3px rgba(0,255,136,0.1)}
+.input-valid{border-color:var(--accent)!important}
+.input-invalid{border-color:var(--danger)!important}
+.radar-loader{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.85);display:none;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.radar-circle{width:120px;height:120px;border:2px solid var(--accent);border-radius:50%;position:relative;animation:radarSpin 2s linear infinite}
+.radar-circle::before,.radar-circle::after{content:'';position:absolute;border-radius:50%;border:1px solid var(--accent);inset:10px;animation:radarPulse 2s ease-out infinite}
+.radar-circle::after{inset:25px;animation-delay:.5s}
+@keyframes radarSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes radarPulse{0%{transform:scale(0.8);opacity:1}100%{transform:scale(1.3);opacity:0}}
+.radar-text{margin-top:20px;font-family:'Courier New',monospace;color:var(--accent);letter-spacing:2px;font-size:.9rem}
+.btn-agency{background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:10px 24px;font-family:'Courier New',monospace;font-size:.85rem;letter-spacing:1px;text-transform:uppercase;transition:all .3s}
+.btn-agency:hover{background:var(--accent);color:#000;box-shadow:0 0 20px rgba(0,255,136,0.3)}
+.btn-pdf{background:transparent;color:var(--info);border:1px solid var(--info);border-radius:8px;padding:10px 24px;font-family:'Courier New',monospace;font-size:.85rem;letter-spacing:1px;text-transform:uppercase;transition:all .3s}
+.btn-pdf:hover{background:var(--info);color:#000}
+.conclusion-screen{display:none;text-align:center;padding:60px 20px}
+.badge-rank{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent-secondary));color:#000;padding:12px 32px;border-radius:50px;font-weight:bold;font-size:1.1rem;margin:20px 0;box-shadow:0 5px 25px rgba(0,255,136,0.3)}
+.swipe-hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);border:1px solid var(--border);border-radius:20px;padding:8px 20px;font-size:.75rem;color:var(--text-secondary);z-index:500;display:none}
+.zone-modal .modal-content{background:var(--bg-panel);border:1px solid var(--accent);color:var(--text-primary)}
+.zone-modal .modal-header{border-bottom:1px solid var(--border)}
+.zone-modal .modal-footer{border-top:1px solid var(--border)}
+.zone-modal .btn-close{filter:invert(1) grayscale(100%) brightness(200%)}
+.pulver-legend{font-size:.75rem;color:var(--text-secondary);line-height:1.8}
+.pulver-legend .zone-tag{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+@media(max-width:768px){.agency-logo{font-size:.9rem}.hs-user{width:28px;height:28px}.hs-user::after{width:16px;height:16px;font-size:.5rem}}
+body.theme-matrix{--accent:#00ff41;--accent-secondary:#008f11;--bg-panel:#0d1117}
+body.theme-superman{--accent:#ffd700;--accent-secondary:#ff4444;--bg-panel:#1a1a2e;--bg-primary:#0f0f1a}
+body.theme-terminator{--accent:#ff3333;--accent-secondary:#cc0000;--bg-panel:#1a0a0a;--bg-primary:#0f0505}
+body.theme-fifthelement{--accent:#ff8c00;--accent-secondary:#ff4500;--bg-panel:#1a1510;--bg-primary:#0f0c08}
+.fade-in-up{animation:fadeInUp .6s ease forwards;opacity:0}
+@keyframes fadeInUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(20px)}}
+.delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
+.toast-container{z-index:9999}
+.toast{background:var(--bg-panel);border:1px solid var(--accent);color:var(--text-primary)}
+.toast-header{background:rgba(0,255,136,0.1);color:var(--accent);border-bottom:1px solid var(--border)}
+#pdf-content{background:#fff;color:#000;padding:40px;font-family:'Segoe UI',sans-serif;display:none}
+#pdf-content h1{color:#000;font-size:1.5rem;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:20px}
+#pdf-content h2{color:#333;font-size:1.1rem;margin-top:20px}
+#pdf-content p,#pdf-content li{font-size:0.95rem;line-height:1.6;color:#222}
+#pdf-content .answer-box{background:#f5f5f5;border-left:4px solid #333;padding:10px 15px;margin:8px 0}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- Tooltip Global -->
+<div id="g-tip"><h6></h6><p></p></div>
+
+<!-- Registro -->
+<div id="register-screen">
+    <div class="register-box fade-in-up">
+        <div class="text-center mb-3">
+            <div style="font-size:3rem;color:var(--accent);margin-bottom:8px;"><i class="bi bi-shield-lock-fill"></i></div>
+            <h2 style="font-family:'Courier New',monospace;color:var(--accent);font-size:1.3rem;margin-bottom:4px;">IDC - AAPV</h2>
+            <p style="font-size:.65rem;color:var(--text-secondary);letter-spacing:2px;text-transform:uppercase;margin:0;">Agencia de Análisis Psicológico Visual</p>
+        </div>
+        <h2 style="text-align:center;font-size:1.1rem;"><i class="bi bi-person-badge"></i> REGISTRO DE AGENTE</h2>
+        <p class="subtitle">Complete sus credenciales para acceder al sistema de decodificación</p>
+        <form id="register-form" novalidate>
+            <div class="mb-3">
+                <label class="form-label">Nombre completo</label>
+                <input type="text" class="form-control" id="reg-nombre" placeholder="Ej: Juan Carlos" required>
+                <div class="invalid-feedback">Ingrese su nombre.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Apellidos completos</label>
+                <input type="text" class="form-control" id="reg-apellidos" placeholder="Ej: Pérez Gómez" required>
+                <div class="invalid-feedback">Ingrese sus apellidos.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="reg-email" placeholder="agente@aapv.gov" required>
+                <div class="invalid-feedback">Ingrese un correo válido.</div>
+            </div>
+            <button type="submit" class="btn-agency" id="btn-iniciar-mision"><i class="bi bi-arrow-right-circle"></i> INICIAR MISIÓN</button>
+        </form>
+    </div>
+</div>
+
+<!-- Boot -->
+<div id="boot-screen">
+    <div class="boot-text" id="boot-text"></div>
+    <div style="margin-top:30px;display:none;" id="boot-btn-container">
+        <button class="btn-agency" onclick="enterApp()"><i class="bi bi-shield-lock"></i> ACCEDER AL SISTEMA</button>
+    </div>
+</div>
+
+<!-- Radar -->
+<div class="radar-loader" id="radar-loader">
+    <div class="radar-circle"></div>
+    <div class="radar-text" id="radar-text">DECODIFICANDO...</div>
+</div>
+
+<!-- Toasts -->
+<div class="toast-container position-fixed top-0 end-0 p-3" id="toast-container"></div>
+
+<!-- App -->
+<div class="app-container" id="app">
+    <header class="agency-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="agency-logo"><span class="status-indicator"></span>AAPV // ESCANER DE CAPAS</div>
+                </div>
+                <div class="col-auto">
+                    <span class="badge bg-dark border border-secondary" style="font-family:'Courier New',monospace;font-size:.75rem;"><i class="bi bi-wifi"></i> <span id="connection-status">ONLINE</span></span>
+                    <button class="btn btn-sm btn-outline-secondary ms-2" onclick="toggleTheme()" title="Cambiar Tema"><i class="bi bi-palette"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="container-fluid py-3" id="main-nav" style="display:none;">
+        <div class="d-flex justify-content-center flex-wrap">
+            <div class="nav nav-pills" role="tablist">
+                <button class="nav-link active" onclick="showDashboard()"><i class="bi bi-grid-3x3-gap"></i> EXPEDIENTES</button>
+                <button class="nav-link" onclick="showConclusion()"><i class="bi bi-file-earmark-text"></i> CONCLUSIÓN</button>
+                <button class="nav-link" onclick="generatePDF()"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
+                <button class="nav-link" onclick="generateCSV()"><i class="bi bi-filetype-csv"></i> CSV</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard -->
+    <main class="container-fluid px-3 px-md-4" id="dashboard">
+        <div class="text-center mb-4 fade-in-up">
+            <h1 style="font-family:'Courier New',monospace;font-size:1.3rem;color:var(--accent);"><i class="bi bi-folder-symlink"></i> EXPEDIENTES CLASIFICADOS</h1>
+            <p class="text-secondary mb-0" style="font-size:.9rem;">Seleccione un caso para insertar hotspots y decodificar la Matriz de Pulver</p>
+        </div>
+        <div class="row g-4 justify-content-center" id="cases-grid"></div>
+    </main>
+
+    <!-- Analysis View -->
+    <div class="analysis-view container-fluid px-3 px-md-4" id="analysis-view">
+        <div class="row g-4">
+            <div class="col-lg-3 order-2 order-lg-1">
+                <div class="panel-side fade-in-up">
+                    <div class="panel-label"><i class="bi bi-cpu"></i> METADATOS DEL SISTEMA</div>
+                    <h5 id="meta-title" style="color:var(--accent);font-weight:bold;"></h5>
+                    <p class="text-secondary" style="font-size:.85rem;" id="meta-artist"></p>
+                    <hr style="border-color:var(--border);">
+                    <div class="mb-3">
+                        <div class="panel-label"><i class="bi bi-film"></i> SINOPSIS</div>
+                        <p style="font-size:.85rem;line-height:1.6;" id="meta-sinopsis"></p>
+                    </div>
+                    <div class="mb-3">
+                        <div class="panel-label"><i class="bi bi-link-45deg"></i> TRÁILER OFICIAL</div>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm" id="trailer-url" readonly>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="copyTrailer()"><i class="bi bi-clipboard"></i></button>
+                        </div>
+                        <a id="trailer-link" href="#" target="_blank" class="btn btn-agency btn-sm w-100 mt-2" style="padding:6px;"><i class="bi bi-play-circle"></i> VER TRÁILER</a>
+                    </div>
+                    <div class="mt-4">
+                        <div class="panel-label"><i class="bi bi-check-circle"></i> PROGRESO</div>
+                        <div class="progress" style="height:8px;background:var(--bg-primary);"><div class="progress-bar" id="case-progress" style="background:var(--accent);width:0%"></div></div>
+                        <small class="text-secondary mt-1 d-block" id="progress-text">0% completado</small>
+                    </div>
+                    <button class="btn-agency w-100 mt-4" onclick="backToDashboard()"><i class="bi bi-arrow-left"></i> VOLVER</button>
+                </div>
+            </div>
+
+            <div class="col-lg-6 order-1 order-lg-2">
+                <div class="panel-side p-0 overflow-hidden fade-in-up delay-1">
+                    <div class="panel-label p-3 pb-0 d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-eye"></i> ESCANER DE CAPAS - INSERTAR HOTSPOTS</span>
+                        <button class="btn btn-sm btn-outline-success" id="btn-insert-mode" onclick="toggleInsertMode()" style="font-size:.7rem;padding:4px 10px;"><i class="bi bi-plus-circle"></i> MODO INSERCIÓN</button>
+                    </div>
+                    <div class="stage-wrap mx-3 mb-3" id="stage-wrap" style="position:relative;">
+                        <div class="stage-img-wrap" id="stage-img-wrap">
+                            <img id="main-poster-img" src="" alt="Afiche" style="width:100%;display:block;">
+                            <div class="pulver-overlay" id="pulver-overlay">
+                                <div class="pulver-zone-ref center">YO / PRESENTE</div>
+                                <div class="pulver-zone-ref top">SUPERIOR<br>Espíritu</div>
+                                <div class="pulver-zone-ref bottom">INFERIOR<br>Biológico</div>
+                                <div class="pulver-zone-ref left">IZQUIERDA<br>Pasado</div>
+                                <div class="pulver-zone-ref right">DERECHA<br>Futuro</div>
+                                <div class="pulver-zone-ref top-left">SUP-IZQ<br>Represión</div>
+                                <div class="pulver-zone-ref top-right">SUP-DER<br>Expansión</div>
+                                <div class="pulver-zone-ref bottom-left">INF-IZQ<br>Obsesión</div>
+                                <div class="pulver-zone-ref bottom-right">INF-DER<br>Agresión</div>
+                            </div>
+                            <button class="btn-overlay-toggle" id="btn-toggle-overlay" onclick="toggleOverlay()"><i class="bi bi-layers"></i> VER CAPAS</button>
+                        </div>
+                        <div id="hotspots-container"></div>
+                    </div>
+                    <div class="px-3 pb-3">
+                        <div class="pulver-legend mb-2">
+                            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                <span><span class="zone-tag" style="background:#00aaff"></span>Sup: Espíritu</span>
+                                <span><span class="zone-tag" style="background:#ff4444"></span>Inf: Biológico</span>
+                                <span><span class="zone-tag" style="background:#aa50ff"></span>Izq: Pasado</span>
+                                <span><span class="zone-tag" style="background:#00ff88"></span>Der: Futuro</span>
+                                <span><span class="zone-tag" style="background:#ffaa00"></span>Sup-Izq: Represión</span>
+                                <span><span class="zone-tag" style="background:#00ffff"></span>Sup-Der: Expansión</span>
+                                <span><span class="zone-tag" style="background:#ff5555"></span>Inf-Izq: Obsesión</span>
+                                <span><span class="zone-tag" style="background:#ff2222"></span>Inf-Der: Agresión</span>
+                            </div>
+                        </div>
+                        <p class="text-secondary text-center mb-0" style="font-size:.75rem;"><i class="bi bi-hand-index-thumb"></i> Active MODO INSERCIÓN y haga clic sobre el afiche para colocar un hotspot</p>
+                        <p class="text-secondary text-center mb-0" style="font-size:.7rem;"><i class="bi bi-arrows-move"></i> Puede arrastrar los hotspots para reposicionarlos. Clic para editar.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 order-3">
+                <div class="panel-side fade-in-up delay-2">
+                    <div class="panel-label"><i class="bi bi-list-check"></i> PROTOCOLO DE DECODIFICACIÓN</div>
+
+                    <div class="protocol-step completed" id="step-1">
+                        <div class="d-flex align-items-center mb-2"><span class="step-number">1</span><strong style="font-size:.9rem;">Hackeo del Sistema</strong></div>
+                        <p class="text-secondary mb-2" style="font-size:.8rem;">URL del tráiler verificada en panel lateral.</p>
+                        <span class="badge bg-success bg-opacity-25 text-success border border-success" style="font-size:.7rem;"><i class="bi bi-check-lg"></i> COMPLETADO</span>
+                    </div>
+
+                    <div class="protocol-step" id="step-2">
+                        <div class="d-flex align-items-center mb-2"><span class="step-number">2</span><strong style="font-size:.9rem;">Escaneo de Orientación</strong></div>
+                        <p class="text-secondary mb-2" style="font-size:.8rem;">Seleccione la dirección de la mirada.</p>
+                        <select class="form-select form-select-sm" id="orientation-select" onchange="checkOrientation()">
+                            <option value="">Seleccionar...</option>
+                            <option value="left">Izquierda (Pasado/Origen)</option>
+                            <option value="right">Derecha (Futuro/Avance)</option>
+                            <option value="up">Arriba (Idealismo)</option>
+                            <option value="down">Abajo (Materialismo)</option>
+                            <option value="center">Centro (Presente/Yo)</option>
+                        </select>
+                        <div id="orientation-feedback" class="mt-2" style="font-size:.8rem;"></div>
+                    </div>
+
+                    <div class="protocol-step" id="step-3">
+                        <div class="d-flex align-items-center mb-2"><span class="step-number">3</span><strong style="font-size:.9rem;">Inserción de Hotspots</strong></div>
+                        <p class="text-secondary mb-2" style="font-size:.8rem;">Coloque al menos 5 hotspots sobre el afiche e interprete cada zona.</p>
+                        <div id="zones-checklist" class="text-secondary" style="font-size:.8rem;">
+                            <div class="d-flex align-items-center mb-1 zone-check" data-zone="top"><i class="bi bi-circle me-2"></i> Superior (Espíritu)</div>
+                            <div class="d-flex align-items-center mb-1 zone-check" data-zone="bottom"><i class="bi bi-circle me-2"></i> Inferior (Biológico)</div>
+                            <div class="d-flex align-items-center mb-1 zone-check" data-zone="left"><i class="bi bi-circle me-2"></i> Izquierda (Pasado)</div>
+                            <div class="d-flex align-items-center mb-1 zone-check" data-zone="right"><i class="bi bi-circle me-2"></i> Derecha (Futuro)</div>
+                            <div class="d-flex align-items-center mb-1 zone-check" data-zone="top-left"><i class="bi bi-circle me-2"></i> Sup-Izq (Represión)</div>
+                            <div class="d-flex align-items-center mb-1 zone-check" data-zone="top-right"><i class="bi bi-circle me-2"></i> Sup-Der (Expansión)</div>
+                            <div class="d-flex align-items-center mb-1 zone-check" data-zone="bottom-left"><i class="bi bi-circle me-2"></i> Inf-Izq (Obsesión)</div>
+                            <div class="d-flex align-items-center mb-1 zone-check" data-zone="bottom-right"><i class="bi bi-circle me-2"></i> Inf-Der (Agresión)</div>
+                        </div>
+                        <div class="mt-2">
+                            <small class="text-secondary" style="font-size:.7rem;">Hotspots colocados: <span id="hs-count" style="color:var(--accent);font-weight:bold;">0</span> / 5 mínimo</small>
+                        </div>
+                    </div>
+
+                    <div class="protocol-step" id="step-4">
+                        <div class="d-flex align-items-center mb-2"><span class="step-number">4</span><strong style="font-size:.9rem;">Rastreo del Título</strong></div>
+                        <p class="text-secondary mb-2" style="font-size:.8rem;">Ubicación del título en el afiche.</p>
+                        <select class="form-select form-select-sm" id="title-position" onchange="checkTitlePosition()">
+                            <option value="">Posición...</option>
+                            <option value="center">Centro (Yo/Interacción)</option>
+                            <option value="top">Superior (Aspiración)</option>
+                            <option value="bottom">Inferior (Anclaje terrenal)</option>
+                            <option value="left">Izquierda (Origen)</option>
+                            <option value="right">Derecha (Proyección)</option>
+                        </select>
+                        <div id="title-feedback" class="mt-2" style="font-size:.8rem;"></div>
+                    </div>
+
+                    <div class="protocol-step" id="step-5">
+                        <div class="d-flex align-items-center mb-2"><span class="step-number">5</span><strong style="font-size:.9rem;">Sello de la Matriz</strong></div>
+                        <p class="text-secondary mb-2" style="font-size:.8rem;">Ingrese la palabra clave de motivación.</p>
+                        <input type="text" class="form-control form-control-sm" id="keyword-input" placeholder="Palabra clave..." oninput="validateKeywordRealtime()" autocomplete="off">
+                        <div id="keyword-feedback" class="mt-2" style="font-size:.8rem;"></div>
+                    </div>
+                </div>
+
+                <div class="panel-side mt-3 fade-in-up delay-3">
+                    <div class="panel-label"><i class="bi bi-question-circle"></i> CUESTIONARIO DEL AGENTE</div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;"><strong>P1.</strong> La motivación principal del protagonista se relaciona con:</label>
+                        <select class="form-select form-select-sm" id="q1-select" onchange="checkQ1()">
+                            <option value="">Seleccione...</option>
+                            <option value="a">a) La venganza personal</option>
+                            <option value="b">b) El descubrimiento de la verdad/destino</option>
+                            <option value="c">c) El enriquecimiento material</option>
+                            <option value="d">d) El poder político</option>
+                        </select>
+                        <div id="q1-feedback" class="mt-2" style="font-size:.8rem;"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;"><strong>P2.</strong> El elemento dominante en la zona SUPERIOR representa:</label>
+                        <select class="form-select form-select-sm" id="q2-select" onchange="checkQ2()">
+                            <option value="">Seleccione...</option>
+                            <option value="a">a) Instintos y destrucción</option>
+                            <option value="b">b) Intelecto, idealismo o poder</option>
+                            <option value="c">c) Pasado y melancolía</option>
+                            <option value="d">d) Caos biológico</option>
+                        </select>
+                        <div id="q2-feedback" class="mt-2" style="font-size:.8rem;"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;"><strong>P3.</strong> Analice cómo el artista usa el espacio para comunicar la tensión pasado/futuro (mín. 30 palabras):</label>
+                        <textarea class="form-control" id="q3-text" rows="4" placeholder="Escriba su análisis aquí..." oninput="checkQ3()"></textarea>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small class="text-secondary" id="q3-count" style="font-size:.75rem;">0 palabras</small>
+                            <small class="text-secondary" style="font-size:.75rem;">Mín. 30 palabras</small>
+                        </div>
+                        <div id="q3-feedback" class="mt-2" style="font-size:.8rem;"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;"><strong>P4. Análisis Reflexivo.</strong> Reflexione sobre su propio proceso de decodificación: ¿Qué patrones espaciales descubrió que se repiten entre los diferentes afiches? ¿Cómo cambió su percepción visual tras aplicar la Matriz de Pulver? ¿Qué limitaciones encuentra en este modelo? (mín. 50 palabras):</label>
+                        <textarea class="form-control" id="q4-text" rows="5" placeholder="Escriba su análisis reflexivo aquí..." oninput="checkQ4()"></textarea>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small class="text-secondary" id="q4-count" style="font-size:.75rem;">0 palabras</small>
+                            <small class="text-secondary" style="font-size:.75rem;">Mín. 50 palabras</small>
+                        </div>
+                        <div id="q4-feedback" class="mt-2" style="font-size:.8rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="conclusion-screen container" id="conclusion-screen">
+        <div class="fade-in-up">
+            <i class="bi bi-award" style="font-size:4rem;color:var(--accent);"></i>
+            <h2 style="font-family:'Courier New',monospace;margin-top:20px;color:var(--accent);">MISIÓN CUMPLIDA</h2>
+            <div class="badge-rank"><i class="bi bi-star-fill"></i> MAESTRO DECODIFICADOR</div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-8">
+                    <div class="panel-side text-start">
+                        <div class="panel-label"><i class="bi bi-journal-text"></i> INFORME FINAL</div>
+                        <div id="conclusion-text" style="font-size:.9rem;line-height:1.8;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                <button class="btn-agency" onclick="showDashboard()"><i class="bi bi-arrow-counterclockwise"></i> NUEVA MISIÓN</button>
+                <button class="btn-pdf" onclick="generatePDF()"><i class="bi bi-file-earmark-pdf"></i> DESCARGAR PDF</button>
+                <button class="btn-pdf" onclick="generateCSV()" style="border-color:var(--warning);color:var(--warning);"><i class="bi bi-filetype-csv"></i> DESCARGAR CSV</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Insertar -->
+<div class="modal fade zone-modal" id="insertModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color:var(--accent);font-family:'Courier New',monospace;"><i class="bi bi-geo-alt-fill"></i> INSERTAR HOTSPOT</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-secondary" style="font-size:.85rem;">Posición: <span id="insert-pos" style="color:var(--accent);font-family:monospace;"></span></p>
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.8rem;"><strong>1. Zona espacial donde se ubica el elemento:</strong></label>
+                    <select class="form-select" id="insert-zone">
+                        <option value="">-- Seleccionar zona --</option>
+                        <option value="top">Superior (Espíritu / Intelecto)</option>
+                        <option value="bottom">Inferior (Biológico / Instinto)</option>
+                        <option value="left">Izquierda (Pasado / Origen)</option>
+                        <option value="right">Derecha (Futuro / Avance)</option>
+                        <option value="top-left">Sup-Izq (Represión / Reserva)</option>
+                        <option value="top-right">Sup-Der (Expansión / Iniciativa)</option>
+                        <option value="bottom-left">Inf-Izq (Obsesión / Depresión)</option>
+                        <option value="bottom-right">Inf-Der (Agresión / Rebeldía)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.8rem;"><strong>2. Elemento visual detectado:</strong></label>
+                    <input type="text" class="form-control" id="insert-element" placeholder="Ej: Helicóptero de combate, rostro del protagonista...">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.8rem;"><strong>3. Interpretación psicológica según Pulver:</strong></label>
+                    <textarea class="form-control" id="insert-interpretation" rows="3" placeholder="Describa qué representa este elemento según la zona espacial donde se ubica..."></textarea>
+                </div>
+                <div id="insert-feedback" class="mt-2" style="font-size:.85rem;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn-agency btn-sm" onclick="confirmInsertHotspot()">INSERTAR HOTSPOT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar -->
+<div class="modal fade zone-modal" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color:var(--accent);font-family:'Courier New',monospace;"><i class="bi bi-pencil-square"></i> EDITAR HOTSPOT</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.8rem;"><strong>Zona espacial:</strong></label>
+                    <select class="form-select" id="edit-zone">
+                        <option value="">-- Seleccionar zona --</option>
+                        <option value="top">Superior (Espíritu / Intelecto)</option>
+                        <option value="bottom">Inferior (Biológico / Instinto)</option>
+                        <option value="left">Izquierda (Pasado / Origen)</option>
+                        <option value="right">Derecha (Futuro / Avance)</option>
+                        <option value="top-left">Sup-Izq (Represión / Reserva)</option>
+                        <option value="top-right">Sup-Der (Expansión / Iniciativa)</option>
+                        <option value="bottom-left">Inf-Izq (Obsesión / Depresión)</option>
+                        <option value="bottom-right">Inf-Der (Agresión / Rebeldía)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.8rem;"><strong>Elemento visual:</strong></label>
+                    <input type="text" class="form-control" id="edit-element">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.8rem;"><strong>Interpretación psicológica:</strong></label>
+                    <textarea class="form-control" id="edit-interpretation" rows="3"></textarea>
+                </div>
+                <div id="edit-feedback" class="mt-2" style="font-size:.85rem;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteCurrentHotspot()">Eliminar</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn-agency btn-sm" onclick="saveEditHotspot()">GUARDAR CAMBIOS</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="pdf-content"></div>
+
+<div class="swipe-hint" id="swipe-hint"><i class="bi bi-arrow-left-right"></i> Deslice para navegar</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ==================== DATOS ====================
+const CASES = [
+    {
+        id: 1,
+        title: "Misión Imposible: Sentencia Mortal",
+        artist: "Christopher McQuarrie, 2023",
+        poster: "Misión Imposible.jpg",
+        sinopsis: "Ethan Hunt y el equipo del IMF se enfrentan a una amenaza global que desafía todo lo que conocen. Una carrera contrarreloj donde el pasado y el futuro colisionan.",
+        trailer: "https://www.youtube.com/watch?v=HurjfO_TDlQ",
+        status: "ACTIVO",
+        progress: 0
+    },
+    {
+        id: 2,
+        title: "Dune: Parte Dos",
+        artist: "Denis Villeneuve, 2024",
+        poster: "https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
+        sinopsis: "Paul Atreides se une a Chani y los Fremen mientras busca venganza contra los conspiradores que destruyeron a su familia. Deberá elegir entre el amor de su vida y el destino del universo.",
+        trailer: "https://www.youtube.com/watch?v=Way9Dexny3w",
+        status: "ACTIVO",
+        progress: 0
+    },
+    {
+        id: 3,
+        title: "Oppenheimer",
+        artist: "Christopher Nolan, 2023",
+        poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+        sinopsis: "La historia del científico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atómica durante la Segunda Guerra Mundial. Un estudio sobre el peso del conocimiento y la responsabilidad.",
+        trailer: "https://www.youtube.com/watch?v=bK6ldnjE3Y0",
+        status: "ACTIVO",
+        progress: 0
+    },
+    {
+        id: 4,
+        title: "The Batman",
+        artist: "Matt Reeves, 2022",
+        poster: "poster-oficial-the-batman.jpg",
+        sinopsis: "Bruce Wayne en sus primeros años como Batman, enfrentándose a un asesino en serie que opera en las sombras de Gotham. Una exploración del trauma, la venganza y la justicia.",
+        trailer: "https://www.youtube.com/watch?v=mqqft2x_Aa4",
+        status: "ACTIVO",
+        progress: 0
+    },
+    {
+        id: 5,
+        title: "Everything Everywhere All at Once",
+        artist: "Daniels, 2022",
+        poster: "Everything Everywhere All at Once .jpg",
+        sinopsis: "Una inmigrante china en Estados Unidos descubre que puede acceder a versiones paralelas de sí misma para salvar el multiverso. Una reflexión sobre el vacío existencial y el amor familiar.",
+        trailer: "https://www.youtube.com/watch?v=wxN1T1uxQ2g",
+        status: "ACTIVO",
+        progress: 0
+    },
+    {
+        id: 6,
+        title: "Napoleón",
+        artist: "Ridley Scott, 2023",
+        poster: "Napoleaon-404072945-large.jpg",
+        sinopsis: "Un retrato épico de la ascensión y caída del emperador francés Napoleón Bonaparte, explorando su relación con Josefina y su obsesión por el poder y la gloria militar.",
+        trailer: "https://www.youtube.com/watch?v=OAZWXU2eHUQ",
+        status: "ACTIVO",
+        progress: 0
+    }
+];
+
+const ZONE_LABELS = {
+    'top': 'Superior (Espíritu)',
+    'bottom': 'Inferior (Biológico)',
+    'left': 'Izquierda (Pasado)',
+    'right': 'Derecha (Futuro)',
+    'top-left': 'Sup-Izq (Represión)',
+    'top-right': 'Sup-Der (Expansión)',
+    'bottom-left': 'Inf-Izq (Obsesión)',
+    'bottom-right': 'Inf-Der (Agresión)'
+};
+
+// ==================== ESTADO GLOBAL ====================
+let currentCase = null;
+let hotspots = [];
+let insertMode = false;
+let currentHotspotId = null;
+let pendingInsert = null;
+let dragHotspot = null;
+let dragOffset = {x:0, y:0};
+let agentData = {nombre:'', apellidos:'', email:''};
+let caseAnswers = {};
+
+// ==================== INICIALIZACIÓN ====================
+document.addEventListener('DOMContentLoaded', function() {
+    initRegister();
+    renderCases();
+    initHotspotEvents();
+    initTooltip();
+});
+
+// ==================== REGISTRO ====================
+function initRegister() {
+    const form = document.getElementById('register-form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitRegistration();
+    });
+}
+
+function submitRegistration() {
+    const nombre = document.getElementById('reg-nombre').value.trim();
+    const apellidos = document.getElementById('reg-apellidos').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    
+    let valid = true;
+    
+    if (!nombre) {
+        document.getElementById('reg-nombre').classList.add('is-invalid');
+        valid = false;
+    } else {
+        document.getElementById('reg-nombre').classList.remove('is-invalid');
+    }
+    
+    if (!apellidos) {
+        document.getElementById('reg-apellidos').classList.add('is-invalid');
+        valid = false;
+    } else {
+        document.getElementById('reg-apellidos').classList.remove('is-invalid');
+    }
+    
+    if (!email || !email.includes('@')) {
+        document.getElementById('reg-email').classList.add('is-invalid');
+        valid = false;
+    } else {
+        document.getElementById('reg-email').classList.remove('is-invalid');
+    }
+    
+    if (!valid) {
+        showToast('Error', 'Complete todos los campos correctamente.', 'danger');
+        return;
+    }
+    
+    agentData = {nombre, apellidos, email};
+    
+    document.getElementById('register-screen').style.display = 'none';
+    document.getElementById('boot-screen').style.display = 'flex';
+    
+    runBootSequence();
+}
+
+function runBootSequence() {
+    const lines = [
+        '> INICIANDO SISTEMA AAPV v4.2...',
+        '> VERIFICANDO CREDENCIALES...',
+        '> AGENTE: ' + agentData.nombre.toUpperCase() + ' ' + agentData.apellidos.toUpperCase(),
+        '> ID: ' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+        '> ACCESO CONCEDIDO - NIVEL 5',
+        '> CARGANDO MATRIZ DE PULVER...',
+        '> DECODIFICADORES ESPACIALES: OK',
+        '> SISTEMA LISTO'
+    ];
+    
+    const container = document.getElementById('boot-text');
+    container.innerHTML = '';
+    
+    let i = 0;
+    function typeLine() {
+        if (i < lines.length) {
+            const div = document.createElement('div');
+            div.className = 'boot-line';
+            div.textContent = lines[i];
+            div.style.animationDelay = (i * 0.3) + 's';
+            container.appendChild(div);
+            i++;
+            setTimeout(typeLine, 300);
+        } else {
+            setTimeout(function() {
+                document.getElementById('boot-btn-container').style.display = 'block';
+            }, 800);
+        }
+    }
+    typeLine();
+}
+
+function enterApp() {
+    document.getElementById('boot-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('main-nav').style.display = 'block';
+    showDashboard();
+    showToast('Bienvenido', 'Agente ' + agentData.nombre + ' conectado al sistema.', 'success');
+}
+
+// ==================== DASHBOARD ====================
+function renderCases() {
+    const grid = document.getElementById('cases-grid');
+    grid.innerHTML = CASES.map(function(c) {
+        return '<div class="col-6 col-md-4 col-lg-3">' +
+            '<div class="case-card" onclick="openCase(' + c.id + ')">' +
+                '<div class="poster-container">' +
+                    '<img src="' + c.poster + '" alt="' + c.title + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/300x450/1a1a1a/00ff88?text=SIN+IMAGEN\'">' +
+                    '<div class="case-overlay">' +
+                        '<h5 style="font-size:.9rem;font-weight:bold;margin-bottom:4px;">' + c.title + '</h5>' +
+                        '<p style="font-size:.75rem;color:var(--text-secondary);margin:0;">' + c.artist + '</p>' +
+                    '</div>' +
+                    '<div class="case-number">CASO #' + String(c.id).padStart(3,'0') + '</div>' +
+                    '<div class="case-status"><i class="bi bi-shield-check" style="color:var(--accent);"></i></div>' +
+                '</div>' +
+                '<div style="padding:12px;">' +
+                    '<div class="progress-micro"><div class="progress-micro-bar" style="width:' + c.progress + '%"></div></div>' +
+                    '<small style="font-size:.7rem;color:var(--text-secondary);">' + c.progress + '% ANALIZADO</small>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    }).join('');
+}
+
+function openCase(id) {
+    currentCase = CASES.find(function(c) { return c.id === id; });
+    if (!currentCase) return;
+    
+    hotspots = caseAnswers[id] && caseAnswers[id].hotspots ? caseAnswers[id].hotspots : [];
+    
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('analysis-view').style.display = 'block';
+    document.getElementById('conclusion-screen').style.display = 'none';
+    
+    document.getElementById('meta-title').textContent = currentCase.title;
+    document.getElementById('meta-artist').textContent = currentCase.artist;
+    document.getElementById('meta-sinopsis').textContent = currentCase.sinopsis;
+    document.getElementById('trailer-url').value = currentCase.trailer;
+    document.getElementById('trailer-link').href = currentCase.trailer;
+    document.getElementById('main-poster-img').src = currentCase.poster;
+    
+    var ans = caseAnswers[id] || {};
+    document.getElementById('orientation-select').value = ans.orientation || '';
+    document.getElementById('title-position').value = ans.titlePosition || '';
+    document.getElementById('keyword-input').value = ans.keyword || '';
+    document.getElementById('q1-select').value = ans.q1 || '';
+    document.getElementById('q2-select').value = ans.q2 || '';
+    document.getElementById('q3-text').value = ans.q3 || '';
+    document.getElementById('q4-text').value = ans.q4 || '';
+    
+    renderHotspots();
+    updateProgress();
+    checkAllSteps();
+    
+    showToast('Caso Abierto', 'Expediente #' + String(id).padStart(3,'0') + ' cargado.', 'info');
+}
+
+function backToDashboard() {
+    saveCurrentCase();
+    document.getElementById('analysis-view').style.display = 'none';
+    document.getElementById('conclusion-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    renderCases();
+}
+
+function saveCurrentCase() {
+    if (!currentCase) return;
+    caseAnswers[currentCase.id] = {
+        hotspots: hotspots,
+        orientation: document.getElementById('orientation-select').value,
+        titlePosition: document.getElementById('title-position').value,
+        keyword: document.getElementById('keyword-input').value,
+        q1: document.getElementById('q1-select').value,
+        q2: document.getElementById('q2-select').value,
+        q3: document.getElementById('q3-text').value,
+        q4: document.getElementById('q4-text').value
+    };
+    currentCase.progress = calculateProgress();
+}
+
+function calculateProgress() {
+    var completed = 0;
+    if (document.getElementById('orientation-select').value) completed++;
+    if (hotspots.length >= 5) completed++;
+    if (document.getElementById('title-position').value) completed++;
+    if (document.getElementById('keyword-input').value.length >= 3) completed++;
+    if (document.getElementById('q1-select').value) completed++;
+    if (document.getElementById('q2-select').value) completed++;
+    if (countWords(document.getElementById('q3-text').value) >= 30) completed++;
+    if (countWords(document.getElementById('q4-text').value) >= 50) completed++;
+    return Math.round((completed / 8) * 100);
+}
+
+function updateProgress() {
+    var prog = calculateProgress();
+    document.getElementById('case-progress').style.width = prog + '%';
+    document.getElementById('progress-text').textContent = prog + '% completado';
+}
+
+// ==================== HOTSPOTS ====================
+function toggleInsertMode() {
+    insertMode = !insertMode;
+    var btn = document.getElementById('btn-insert-mode');
+    var wrap = document.getElementById('stage-img-wrap');
+    
+    if (insertMode) {
+        btn.innerHTML = '<i class="bi bi-x-circle"></i> CANCELAR';
+        btn.classList.remove('btn-outline-success');
+        btn.classList.add('btn-outline-danger');
+        wrap.classList.add('insert-mode');
+        showToast('Modo Inserción', 'Haga clic sobre el afiche para colocar un hotspot.', 'warning');
+    } else {
+        btn.innerHTML = '<i class="bi bi-plus-circle"></i> MODO INSERCIÓN';
+        btn.classList.remove('btn-outline-danger');
+        btn.classList.add('btn-outline-success');
+        wrap.classList.remove('insert-mode');
+    }
+}
+
+function initHotspotEvents() {
+    var wrap = document.getElementById('stage-img-wrap');
+    
+    wrap.addEventListener('click', function(e) {
+        if (!insertMode) return;
+        if (e.target.closest('.hs-user')) return;
+        
+        var rect = wrap.getBoundingClientRect();
+        var x = ((e.clientX - rect.left) / rect.width * 100).toFixed(2);
+        var y = ((e.clientY - rect.top) / rect.height * 100).toFixed(2);
+        
+        pendingInsert = {x: x, y: y};
+        document.getElementById('insert-pos').textContent = 'X:' + x + '% Y:' + y + '%';
+        
+        document.getElementById('insert-zone').value = '';
+        document.getElementById('insert-element').value = '';
+        document.getElementById('insert-interpretation').value = '';
+        document.getElementById('insert-feedback').innerHTML = '';
+        
+        var modal = new bootstrap.Modal(document.getElementById('insertModal'));
+        modal.show();
+    });
+    
+    document.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', doDrag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchstart', startDrag, {passive:false});
+    document.addEventListener('touchmove', doDrag, {passive:false});
+    document.addEventListener('touchend', endDrag);
+}
+
+function startDrag(e) {
+    var target = e.target.closest('.hs-user');
+    if (!target) return;
+    
+    e.preventDefault();
+    dragHotspot = target;
+    var rect = document.getElementById('stage-img-wrap').getBoundingClientRect();
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    dragOffset.x = clientX - rect.left - (parseFloat(target.style.left) / 100 * rect.width);
+    dragOffset.y = clientY - rect.top - (parseFloat(target.style.top) / 100 * rect.height);
+    target.classList.add('dragging');
+}
+
+function doDrag(e) {
+    if (!dragHotspot) return;
+    e.preventDefault();
+    
+    var rect = document.getElementById('stage-img-wrap').getBoundingClientRect();
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    var x = ((clientX - rect.left - dragOffset.x) / rect.width * 100);
+    var y = ((clientY - rect.top - dragOffset.y) / rect.height * 100);
+    
+    x = Math.max(2, Math.min(98, x));
+    y = Math.max(2, Math.min(98, y));
+    
+    dragHotspot.style.left = x + '%';
+    dragHotspot.style.top = y + '%';
+}
+
+function endDrag(e) {
+    if (!dragHotspot) return;
+    dragHotspot.classList.remove('dragging');
+    
+    var id = parseInt(dragHotspot.dataset.id);
+    var hs = hotspots.find(function(h) { return h.id === id; });
+    if (hs) {
+        hs.x = parseFloat(dragHotspot.style.left);
+        hs.y = parseFloat(dragHotspot.style.top);
+    }
+    
+    dragHotspot = null;
+}
+
+function renderHotspots() {
+    var container = document.getElementById('hotspots-container');
+    container.innerHTML = '';
+    
+    hotspots.forEach(function(hs, index) {
+        var el = document.createElement('div');
+        el.className = 'hs-user';
+        el.dataset.id = hs.id;
+        el.dataset.num = index + 1;
+        el.style.left = hs.x + '%';
+        el.style.top = hs.y + '%';
+        el.innerHTML = '<div class="hs-delete" onclick="deleteHotspot(' + hs.id + ', event)"><i class="bi bi-x"></i></div>';
+        
+        el.addEventListener('click', function(e) {
+            if (e.target.closest('.hs-delete')) return;
+            openEditModal(hs.id);
+        });
+        
+        container.appendChild(el);
+    });
+    
+    document.getElementById('hs-count').textContent = hotspots.length;
+    updateZoneChecklist();
+}
+
+function updateZoneChecklist() {
+    var zones = {};
+    hotspots.forEach(function(h) { zones[h.zone] = true; });
+    
+    document.querySelectorAll('.zone-check').forEach(function(el) {
+        var zone = el.dataset.zone;
+        var icon = el.querySelector('i');
+        if (zones[zone]) {
+            el.style.color = 'var(--accent)';
+            icon.className = 'bi bi-check-circle-fill me-2';
+        } else {
+            el.style.color = '';
+            icon.className = 'bi bi-circle me-2';
+        }
+    });
+}
+
+function confirmInsertHotspot() {
+    var zone = document.getElementById('insert-zone').value;
+    var element = document.getElementById('insert-element').value.trim();
+    var interpretation = document.getElementById('insert-interpretation').value.trim();
+    var feedback = document.getElementById('insert-feedback');
+    
+    if (!zone || !element || !interpretation) {
+        feedback.innerHTML = '<span style="color:var(--danger)"><i class="bi bi-exclamation-triangle"></i> Complete todos los campos.</span>';
+        return;
+    }
+    
+    var id = Date.now();
+    hotspots.push({
+        id: id,
+        x: parseFloat(pendingInsert.x),
+        y: parseFloat(pendingInsert.y),
+        zone: zone,
+        element: element,
+        interpretation: interpretation
+    });
+    
+    renderHotspots();
+    updateProgress();
+    checkAllSteps();
+    
+    var modal = bootstrap.Modal.getInstance(document.getElementById('insertModal'));
+    modal.hide();
+    
+    showToast('Hotspot Agregado', 'Zona: ' + ZONE_LABELS[zone], 'success');
+}
+
+function openEditModal(id) {
+    var hs = hotspots.find(function(h) { return h.id === id; });
+    if (!hs) return;
+    
+    currentHotspotId = id;
+    document.getElementById('edit-zone').value = hs.zone;
+    document.getElementById('edit-element').value = hs.element;
+    document.getElementById('edit-interpretation').value = hs.interpretation;
+    document.getElementById('edit-feedback').innerHTML = '';
+    
+    var modal = new bootstrap.Modal(document.getElementById('editModal'));
+    modal.show();
+}
+
+function saveEditHotspot() {
+    var hs = hotspots.find(function(h) { return h.id === currentHotspotId; });
+    if (!hs) return;
+    
+    var zone = document.getElementById('edit-zone').value;
+    var element = document.getElementById('edit-element').value.trim();
+    var interpretation = document.getElementById('edit-interpretation').value.trim();
+    
+    if (!zone || !element || !interpretation) {
+        document.getElementById('edit-feedback').innerHTML = '<span style="color:var(--danger)"><i class="bi bi-exclamation-triangle"></i> Complete todos los campos.</span>';
+        return;
+    }
+    
+    hs.zone = zone;
+    hs.element = element;
+    hs.interpretation = interpretation;
+    
+    renderHotspots();
+    updateProgress();
+    
+    var modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+    modal.hide();
+    
+    showToast('Hotspot Actualizado', 'Cambios guardados correctamente.', 'success');
+}
+
+function deleteCurrentHotspot() {
+    deleteHotspot(currentHotspotId);
+    var modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+    modal.hide();
+}
+
+function deleteHotspot(id, event) {
+    if (event) event.stopPropagation();
+    hotspots = hotspots.filter(function(h) { return h.id !== id; });
+    renderHotspots();
+    updateProgress();
+    showToast('Hotspot Eliminado', 'El punto ha sido removido.', 'warning');
+}
+
+function toggleOverlay() {
+    var overlay = document.getElementById('pulver-overlay');
+    overlay.classList.toggle('visible');
+}
+
+// ==================== VALIDACIONES ====================
+function checkOrientation() {
+    var val = document.getElementById('orientation-select').value;
+    var fb = document.getElementById('orientation-feedback');
+    var step = document.getElementById('step-2');
+    
+    if (val) {
+        fb.innerHTML = '<span style="color:var(--accent)"><i class="bi bi-check-circle"></i> Orientación registrada.</span>';
+        step.classList.add('completed');
+    } else {
+        fb.innerHTML = '';
+        step.classList.remove('completed');
+    }
+    updateProgress();
+}
+
+function checkTitlePosition() {
+    var val = document.getElementById('title-position').value;
+    var fb = document.getElementById('title-feedback');
+    var step = document.getElementById('step-4');
+    
+    if (val) {
+        fb.innerHTML = '<span style="color:var(--accent)"><i class="bi bi-check-circle"></i> Posición registrada.</span>';
+        step.classList.add('completed');
+    } else {
+        fb.innerHTML = '';
+        step.classList.remove('completed');
+    }
+    updateProgress();
+}
+
+function validateKeywordRealtime() {
+    var val = document.getElementById('keyword-input').value.trim();
+    var fb = document.getElementById('keyword-feedback');
+    var step = document.getElementById('step-5');
+    
+    if (val.length >= 3) {
+        fb.innerHTML = '<span style="color:var(--accent)"><i class="bi bi-check-circle"></i> Palabra clave válida.</span>';
+        step.classList.add('completed');
+    } else {
+        fb.innerHTML = '';
+        step.classList.remove('completed');
+    }
+    updateProgress();
+}
+
+function checkQ1() {
+    var val = document.getElementById('q1-select').value;
+    var fb = document.getElementById('q1-feedback');
+    
+    if (val) {
+        fb.innerHTML = '<span style="color:var(--accent)"><i class="bi bi-check-circle"></i> Respuesta registrada.</span>';
+    } else {
+        fb.innerHTML = '';
+    }
+    updateProgress();
+}
+
+function checkQ2() {
+    var val = document.getElementById('q2-select').value;
+    var fb = document.getElementById('q2-feedback');
+    
+    if (val) {
+        fb.innerHTML = '<span style="color:var(--accent)"><i class="bi bi-check-circle"></i> Respuesta registrada.</span>';
+    } else {
+        fb.innerHTML = '';
+    }
+    updateProgress();
+}
+
+function checkQ3() {
+    var text = document.getElementById('q3-text').value;
+    var count = countWords(text);
+    document.getElementById('q3-count').textContent = count + ' palabras';
+    var fb = document.getElementById('q3-feedback');
+    
+    if (count >= 30) {
+        fb.innerHTML = '<span style="color:var(--accent)"><i class="bi bi-check-circle"></i> Mínimo alcanzado.</span>';
+    } else {
+        fb.innerHTML = '<span style="color:var(--warning)"><i class="bi bi-exclamation-circle"></i> Faltan ' + (30 - count) + ' palabras.</span>';
+    }
+    updateProgress();
+}
+
+function checkQ4() {
+    var text = document.getElementById('q4-text').value;
+    var count = countWords(text);
+    document.getElementById('q4-count').textContent = count + ' palabras';
+    var fb = document.getElementById('q4-feedback');
+    
+    if (count >= 50) {
+        fb.innerHTML = '<span style="color:var(--accent)"><i class="bi bi-check-circle"></i> Mínimo alcanzado.</span>';
+    } else {
+        fb.innerHTML = '<span style="color:var(--warning)"><i class="bi bi-exclamation-circle"></i> Faltan ' + (50 - count) + ' palabras.</span>';
+    }
+    updateProgress();
+}
+
+function countWords(text) {
+    return text.trim().split(/\s+/).filter(function(w) { return w.length > 0; }).length;
+}
+
+function checkAllSteps() {
+    checkOrientation();
+    checkTitlePosition();
+    validateKeywordRealtime();
+    checkQ1();
+    checkQ2();
+    checkQ3();
+    checkQ4();
+    
+    var step3 = document.getElementById('step-3');
+    if (hotspots.length >= 5) {
+        step3.classList.add('completed');
+    } else {
+        step3.classList.remove('completed');
+    }
+}
+
+// ==================== NAVEGACIÓN ====================
+function showDashboard() {
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('analysis-view').style.display = 'none';
+    document.getElementById('conclusion-screen').style.display = 'none';
+    document.querySelectorAll('.nav-link').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelector('.nav-link').classList.add('active');
+}
+
+function showConclusion() {
+    if (!currentCase) {
+        showToast('Error', 'Abra un caso primero.', 'danger');
+        return;
+    }
+    
+    saveCurrentCase();
+    
+    var text = '<p><strong>Agente:</strong> ' + agentData.nombre + ' ' + agentData.apellidos + '</p>';
+    text += '<p><strong>Caso analizado:</strong> ' + currentCase.title + '</p>';
+    text += '<p><strong>Progreso:</strong> ' + calculateProgress() + '%</p>';
+    text += '<hr style="border-color:var(--border);">';
+    text += '<p><strong>Hotspots colocados:</strong> ' + hotspots.length + '</p>';
+    text += '<p><strong>Orientación:</strong> ' + (document.getElementById('orientation-select').value || 'No seleccionada') + '</p>';
+    text += '<p><strong>Posición del título:</strong> ' + (document.getElementById('title-position').value || 'No seleccionada') + '</p>';
+    text += '<p><strong>Palabra clave:</strong> ' + (document.getElementById('keyword-input').value || 'No ingresada') + '</p>';
+    
+    document.getElementById('conclusion-text').innerHTML = text;
+    
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('analysis-view').style.display = 'none';
+    document.getElementById('conclusion-screen').style.display = 'block';
+}
+
+// ==================== UTILIDADES ====================
+function copyTrailer() {
+    var url = document.getElementById('trailer-url');
+    url.select();
+    document.execCommand('copy');
+    showToast('Copiado', 'URL del tráiler copiada al portapapeles.', 'info');
+}
+
+function toggleTheme() {
+    var themes = ['', 'theme-matrix', 'theme-superman', 'theme-terminator', 'theme-fifthelement'];
+    var current = 0;
+    themes.forEach(function(t, i) {
+        if (document.body.classList.contains(t)) current = i;
+    });
+    document.body.classList.remove(themes[current]);
+    var next = (current + 1) % themes.length;
+    if (themes[next]) document.body.classList.add(themes[next]);
+    showToast('Tema', 'Tema visual cambiado.', 'info');
+}
+
+function showToast(title, message, type) {
+    var container = document.getElementById('toast-container');
+    var toast = document.createElement('div');
+    toast.className = 'toast align-items-center border-0 mb-2';
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+    
+    var icon = type === 'success' ? 'bi-check-circle' : type === 'danger' ? 'bi-x-circle' : type === 'warning' ? 'bi-exclamation-triangle' : 'bi-info-circle';
+    var color = type === 'success' ? 'var(--accent)' : type === 'danger' ? 'var(--danger)' : type === 'warning' ? 'var(--warning)' : 'var(--info)';
+    
+    toast.innerHTML = 
+        '<div class="toast-header">' +
+            '<i class="bi ' + icon + ' me-2" style="color:' + color + '"></i>' +
+            '<strong class="me-auto">' + title + '</strong>' +
+            '<button type="button" class="btn-close" data-bs-dismiss="toast"></button>' +
+        '</div>' +
+        '<div class="toast-body">' + message + '</div>';
+    
+    container.appendChild(toast);
+    var bsToast = new bootstrap.Toast(toast, {delay: 3000});
+    bsToast.show();
+    toast.addEventListener('hidden.bs.toast', function() { toast.remove(); });
+}
+
+function initTooltip() {
+    var tip = document.getElementById('g-tip');
+    document.addEventListener('mousemove', function(e) {
+        var target = e.target.closest('[data-tip]');
+        if (target) {
+            var title = target.dataset.tipTitle || '';
+            var content = target.dataset.tip || '';
+            tip.querySelector('h6').textContent = title;
+            tip.querySelector('p').textContent = content;
+            tip.style.left = e.clientX + 'px';
+            tip.style.top = e.clientY + 'px';
+            tip.classList.add('visible');
+        } else {
+            tip.classList.remove('visible');
+        }
+    });
+}
+
+// ==================== EXPORTAR ====================
+function generateCSV() {
+    if (!currentCase) {
+        showToast('Error', 'Abra un caso primero.', 'danger');
+        return;
+    }
+    
+    saveCurrentCase();
+    
+    var csv = 'DATOS DEL AGENTE\n';
+    csv += 'Nombre,' + agentData.nombre + '\n';
+    csv += 'Apellidos,' + agentData.apellidos + '\n';
+    csv += 'Email,' + agentData.email + '\n\n';
+    
+    csv += 'CASO ANALIZADO\n';
+    csv += 'Título,' + currentCase.title + '\n';
+    csv += 'Artista,' + currentCase.artist + '\n';
+    csv += 'Progreso,' + calculateProgress() + '%\n\n';
+    
+    csv += 'HOTSPOTS\n';
+    csv += 'ID,Zona,Elemento,Interpretación,X,Y\n';
+    hotspots.forEach(function(h) {
+        csv += h.id + ',"' + ZONE_LABELS[h.zone] + '","' + h.element + '","' + h.interpretation + '",' + h.x + ',' + h.y + '\n';
+    });
+    csv += '\n';
+    
+    csv += 'RESPUESTAS DEL CUESTIONARIO\n';
+    csv += 'Pregunta,Respuesta\n';
+    csv += 'Orientación,' + (document.getElementById('orientation-select').value || '') + '\n';
+    csv += 'Posición del título,' + (document.getElementById('title-position').value || '') + '\n';
+    csv += 'Palabra clave,' + (document.getElementById('keyword-input').value || '') + '\n';
+    csv += 'P1 Motivación,' + (document.getElementById('q1-select').value || '') + '\n';
+    csv += 'P2 Zona superior,' + (document.getElementById('q2-select').value || '') + '\n';
+    csv += 'P3 Análisis espacial,' + (document.getElementById('q3-text').value || '').replace(/,/g, ';') + '\n';
+    csv += 'P4 Análisis reflexivo,' + (document.getElementById('q4-text').value || '').replace(/,/g, ';') + '\n';
+    
+    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'AAPV_Informe_' + currentCase.id + '_' + Date.now() + '.csv';
+    link.click();
+    
+    showToast('CSV Generado', 'Archivo descargado correctamente.', 'success');
+}
+
+function generatePDF() {
+    if (!currentCase) {
+        showToast('Error', 'Abra un caso primero.', 'danger');
+        return;
+    }
+    
+    saveCurrentCase();
+    
+    var content = document.getElementById('pdf-content');
+    content.style.display = 'block';
+    
+    var html = '<h1>INFORME AAPV - MATRIZ DE PULVER</h1>';
+    html += '<p><strong>Agente:</strong> ' + agentData.nombre + ' ' + agentData.apellidos + ' (' + agentData.email + ')</p>';
+    html += '<p><strong>Fecha:</strong> ' + new Date().toLocaleString() + '</p>';
+    html += '<hr>';
+    html += '<h2>Caso Analizado: ' + currentCase.title + '</h2>';
+    html += '<p><strong>Artista:</strong> ' + currentCase.artist + '</p>';
+    html += '<p><strong>Progreso:</strong> ' + calculateProgress() + '%</p>';
+    html += '<hr>';
+    html += '<h2>Hotspots Identificados (' + hotspots.length + ')</h2>';
+    
+    if (hotspots.length > 0) {
+        html += '<ul>';
+        hotspots.forEach(function(h) {
+            html += '<li><strong>' + ZONE_LABELS[h.zone] + ':</strong> ' + h.element + ' - ' + h.interpretation + '</li>';
+        });
+        html += '</ul>';
+    } else {
+        html += '<p>No se han colocado hotspots.</p>';
+    }
+    
+    html += '<hr>';
+    html += '<h2>Respuestas del Cuestionario</h2>';
+    html += '<div class="answer-box"><strong>Orientación:</strong> ' + (document.getElementById('orientation-select').value || 'No respondida') + '</div>';
+    html += '<div class="answer-box"><strong>Posición del título:</strong> ' + (document.getElementById('title-position').value || 'No respondida') + '</div>';
+    html += '<div class="answer-box"><strong>Palabra clave:</strong> ' + (document.getElementById('keyword-input').value || 'No respondida') + '</div>';
+    html += '<div class="answer-box"><strong>P1:</strong> ' + (document.getElementById('q1-select').value || 'No respondida') + '</div>';
+    html += '<div class="answer-box"><strong>P2:</strong> ' + (document.getElementById('q2-select').value || 'No respondida') + '</div>';
+    html += '<div class="answer-box"><strong>P3:</strong> ' + (document.getElementById('q3-text').value || 'No respondida') + '</div>';
+    html += '<div class="answer-box"><strong>P4:</strong> ' + (document.getElementById('q4-text').value || 'No respondida') + '</div>';
+    
+    content.innerHTML = html;
+    
+    window.print();
+    
+    content.style.display = 'none';
+    showToast('PDF Generado', 'Use la función de imprimir a PDF de su navegador.', 'info');
+}
+</script>
+</body>
+</html>
