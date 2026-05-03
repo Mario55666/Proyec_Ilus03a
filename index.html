@@ -132,6 +132,374 @@ body.theme-fifthelement{--accent:#ff8c00;--accent-secondary:#ff4500;--bg-panel:#
 #pdf-content h2{color:#333;font-size:1.1rem;margin-top:20px}
 #pdf-content p,#pdf-content li{font-size:0.95rem;line-height:1.6;color:#222}
 #pdf-content .answer-box{background:#f5f5f5;border-left:4px solid #333;padding:10px 15px;margin:8px 0}
+
+/* Botón oculto de retroalimentación — Payaso */
+.hidden-feedback-trigger{
+    position:fixed;
+    bottom:12px;
+    left:12px;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.3);
+    border:1px solid rgba(0,255,136,0.15);
+    cursor:pointer;
+    z-index:9000;
+    transition:all .4s cubic-bezier(0.4,0,0.2,1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.4rem;
+    color:rgba(255,255,255,0.25);
+    backdrop-filter:blur(4px);
+}
+.hidden-feedback-trigger .clown-icon{
+    font-size:1.3rem;
+    line-height:1;
+    opacity:0.35;
+    transition:opacity .3s;
+    filter:grayscale(0.6);
+}
+.hidden-feedback-trigger:hover{
+    background:rgba(0,255,136,0.12);
+    border-color:var(--accent);
+    color:var(--accent);
+    width:auto;
+    min-width:220px;
+    padding:6px 16px;
+    border-radius:24px;
+    font-family:'Courier New',monospace;
+    letter-spacing:1px;
+    box-shadow:0 0 20px rgba(0,255,136,0.15);
+}
+.hidden-feedback-trigger:hover .clown-icon{
+    opacity:1;
+    filter:grayscale(0) drop-shadow(0 0 6px var(--accent));
+    margin-right:8px;
+}
+.hidden-feedback-trigger .trigger-text{
+    display:none;
+    font-size:.7rem;
+    font-weight:bold;
+    white-space:nowrap;
+    color:var(--accent);
+    text-shadow:0 0 8px rgba(0,255,136,0.4);
+}
+.hidden-feedback-trigger:hover .trigger-text{
+    display:inline;
+}
+
+/* Modal retroalimentación */
+.feedback-modal .modal-content{
+    background:var(--bg-panel);
+    border:2px solid var(--accent);
+    color:var(--text-primary);
+    max-height:90vh;
+    overflow-y:auto;
+}
+.feedback-modal .modal-header{
+    border-bottom:2px solid var(--accent);
+    background:rgba(0,255,136,0.08);
+}
+.feedback-modal .modal-title{
+    color:var(--accent);
+    font-family:'Courier New',monospace;
+    font-size:1rem;
+    letter-spacing:1px;
+}
+.feedback-modal .feedback-section{
+    background:var(--bg-secondary);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:16px;
+    margin-bottom:14px;
+}
+.feedback-modal .feedback-section h6{
+    color:var(--accent);
+    font-family:'Courier New',monospace;
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.feedback-modal .feedback-section p,
+.feedback-modal .feedback-section li{
+    font-size:.85rem;
+    line-height:1.6;
+    color:var(--text-primary);
+    margin-bottom:6px;
+}
+.feedback-modal .feedback-section ul{
+    padding-left:18px;
+    margin-bottom:0;
+}
+.feedback-modal .feedback-section .model-answer{
+    background:rgba(0,255,136,0.08);
+    border-left:3px solid var(--accent);
+    padding:10px 14px;
+    border-radius:0 6px 6px 0;
+    margin-top:8px;
+    font-size:.85rem;
+    color:var(--text-primary);
+}
+.feedback-modal .feedback-section .rationale{
+    font-size:.8rem;
+    color:var(--text-secondary);
+    font-style:italic;
+    margin-top:6px;
+    border-top:1px dashed var(--border);
+    padding-top:6px;
+}
+.feedback-modal .badge-solution{
+    display:inline-block;
+    background:var(--accent);
+    color:#000;
+    font-size:.65rem;
+    font-weight:bold;
+    padding:2px 8px;
+    border-radius:4px;
+    margin-right:6px;
+    font-family:'Courier New',monospace;
+}
+@media(max-width:768px){
+    .hidden-feedback-trigger{display:none}
+}
+
+
+/* ============================================================
+   RESPONSIVE MOBILE — Escáner de Capas AAPV
+   ============================================================ */
+@media (max-width: 576px) {
+    /* Registro */
+    .register-box{padding:24px 16px;border-radius:12px}
+    .register-box h2{font-size:1rem !important}
+    .register-box .subtitle{font-size:.75rem}
+
+    /* Header */
+    .agency-header{padding:8px 12px}
+    .agency-logo{font-size:.75rem;letter-spacing:1px}
+    .status-indicator{width:6px;height:6px}
+
+    /* Navegación */
+    .nav-pills .nav-link{font-size:.7rem;padding:6px 10px;margin:2px}
+
+    /* Dashboard */
+    #dashboard h1{font-size:1rem !important}
+    #dashboard p{font-size:.8rem !important}
+    .case-card .poster-container{aspect-ratio:2/3}
+    .case-overlay{padding:12px}
+    .case-overlay h5{font-size:.75rem !important}
+    .case-overlay p{font-size:.65rem !important}
+    .case-number{font-size:.6rem;padding:2px 6px}
+
+    /* Analysis View */
+    .analysis-view{padding:0 8px !important}
+    .panel-side{padding:12px;border-radius:8px}
+    .panel-label{font-size:.65rem;letter-spacing:1px}
+
+    /* Escáner */
+    .stage-img-wrap{border-radius:8px}
+    .btn-overlay-toggle{font-size:.55rem;padding:3px 6px;top:6px;right:6px}
+    .pulver-zone-ref{font-size:.45rem !important;letter-spacing:0}
+    .hs-user{width:24px;height:24px}
+    .hs-user::after{width:14px;height:14px;font-size:.45rem}
+
+    /* Protocolo */
+    .protocol-step{padding:12px}
+    .step-number{width:22px;height:22px;font-size:.65rem}
+    .protocol-step strong{font-size:.8rem !important}
+    .protocol-step p{font-size:.75rem !important}
+    .form-select-sm,.form-control-sm{font-size:.8rem}
+
+    /* Cuestionario */
+    .panel-side .form-label{font-size:.8rem !important}
+    .panel-side textarea{font-size:.85rem}
+
+    /* Conclusión */
+    .conclusion-screen{padding:30px 12px}
+    .conclusion-screen h2{font-size:1.1rem !important}
+    .badge-rank{font-size:.9rem;padding:8px 20px}
+
+    /* Footer */
+    .agency-footer{font-size:.65rem;padding:10px 12px}
+
+    /* Modal */
+    .modal-dialog{margin:8px}
+    .zone-modal .modal-content{border-radius:8px}
+    .feedback-modal .modal-content{border-width:1px}
+    .feedback-modal .feedback-section{padding:10px}
+    .feedback-modal .feedback-section h6{font-size:.7rem}
+    .feedback-modal .feedback-section p,
+    .feedback-modal .feedback-section li{font-size:.78rem}
+    .feedback-modal .model-answer{font-size:.78rem;padding:8px 10px}
+
+    /* Radar */
+    .radar-circle{width:80px;height:80px}
+    .radar-text{font-size:.75rem}
+
+    /* Toast */
+    .toast-container{top:auto !important;bottom:10px !important;right:10px !important;left:10px !important}
+}
+
+@media (max-width: 768px) and (min-width: 577px) {
+    .agency-logo{font-size:.85rem}
+    .case-card .poster-container{aspect-ratio:2/3}
+    .hs-user{width:28px;height:28px}
+    .hs-user::after{width:16px;height:16px;font-size:.5rem}
+    .panel-side{padding:14px}
+}
+
+/* Footer estilos base */
+.agency-footer{
+    background:linear-gradient(180deg, rgba(20,20,20,0.9) 0%, rgba(10,10,10,0.95) 100%);
+    border-top:1px solid var(--border);
+    padding:14px 20px;
+    text-align:center;
+    font-size:.75rem;
+    color:var(--text-secondary);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    letter-spacing:.3px;
+    margin-top:auto;
+}
+.agency-footer strong{
+    color:var(--accent);
+    font-weight:600;
+}
+
+
+/* Capa del Esquema de Simbolismo del Espacio */
+.schema-overlay{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:4;
+    opacity:0;
+    transition:opacity .4s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+.schema-overlay.visible{
+    opacity:1;
+    pointer-events:auto;
+}
+.schema-overlay img{
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    object-position:center;
+    opacity:0.55;
+    filter:drop-shadow(0 0 10px rgba(0,255,136,0.2));
+    user-select:none;
+    -webkit-user-drag:none;
+}
+.btn-schema-toggle{
+    position:absolute;
+    top:10px;
+    right:10px;
+    z-index:50;
+    background:rgba(0,0,0,0.7);
+    border:1px solid var(--border);
+    color:var(--text-secondary);
+    font-size:.65rem;
+    padding:4px 10px;
+    border-radius:4px;
+    cursor:pointer;
+    font-family:'Courier New',monospace;
+    transition:all .3s;
+    pointer-events:auto;
+}
+.btn-schema-toggle:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+}
+.btn-schema-toggle.active{
+    background:rgba(0,255,136,0.15);
+    border-color:var(--accent);
+    color:var(--accent);
+}
+@media(max-width:576px){
+    .schema-overlay img{opacity:0.45}
+    .btn-schema-toggle{font-size:.55rem;padding:3px 6px;top:6px;right:6px}
+}
+
+
+/* Controles de Zoom del Esquema */
+.schema-zoom-controls{
+    position:absolute;
+    top:10px;
+    left:10px;
+    z-index:55;
+    display:none;
+    flex-direction:column;
+    gap:4px;
+    background:rgba(0,0,0,0.6);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:4px;
+    backdrop-filter:blur(6px);
+    pointer-events:auto;
+}
+.schema-zoom-controls.visible{
+    display:flex;
+}
+.schema-zoom-btn{
+    width:28px;
+    height:28px;
+    border-radius:6px;
+    background:rgba(0,255,136,0.1);
+    border:1px solid var(--border);
+    color:var(--accent);
+    font-size:.9rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all .2s;
+    font-family:'Courier New',monospace;
+    font-weight:bold;
+    line-height:1;
+    padding:0;
+    pointer-events:auto;
+}
+.schema-zoom-btn:hover{
+    background:var(--accent);
+    color:#000;
+    border-color:var(--accent);
+}
+.schema-zoom-btn:active{
+    transform:scale(0.92);
+}
+.schema-zoom-level{
+    text-align:center;
+    font-size:.55rem;
+    color:var(--text-secondary);
+    font-family:'Courier New',monospace;
+    padding:2px 0;
+    letter-spacing:1px;
+}
+.schema-overlay.visible{
+    cursor:grab;
+}
+.schema-overlay.visible:active{
+    cursor:grabbing;
+}
+.schema-overlay img{
+    transition:transform .15s ease-out;
+    transform-origin:center center;
+    will-change:transform;
+}
+@media(max-width:576px){
+    .schema-zoom-controls{top:6px;left:6px}
+    .schema-zoom-btn{width:24px;height:24px;font-size:.8rem}
+}
+
 </style>
 <base target="_blank">
 </head>
@@ -275,6 +643,17 @@ body.theme-fifthelement{--accent:#ff8c00;--accent-secondary:#ff4500;--bg-panel:#
                                 <div class="pulver-zone-ref bottom-right">INF-DER<br>Agresión</div>
                             </div>
                             <button class="btn-overlay-toggle" id="btn-toggle-overlay" onclick="toggleOverlay()"><i class="bi bi-layers"></i> VER CAPAS</button>
+                            <div class="schema-overlay" id="schema-overlay">
+                                <div class="schema-zoom-controls" id="schema-zoom-controls">
+                                    <button class="schema-zoom-btn" onclick="schemaZoomIn(event)" title="Acercar">+</button>
+                                    <div class="schema-zoom-level" id="schema-zoom-level">100%</div>
+                                    <button class="schema-zoom-btn" onclick="schemaZoomOut(event)" title="Alejar">−</button>
+                                    <button class="schema-zoom-btn" onclick="schemaZoomReset(event)" title="Restablecer" style="font-size:.65rem;"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                </div>
+                                <img src="esquema_pulver.png" id="schema-img" alt="Esquema de Simbolismo del Espacio — Pulver" loading="lazy" onerror="this.style.display='none'" draggable="false">
+                            </div>
+                            <button class="btn-schema-toggle" id="btn-toggle-schema" onclick="toggleSchema()" title="Mostrar/ocultar esquema teórico"><i class="bi bi-diagram-3"></i> VER ESQUEMA</button>
+
                         </div>
                         <div id="hotspots-container"></div>
                     </div>
@@ -434,6 +813,12 @@ body.theme-fifthelement{--accent:#ff8c00;--accent-secondary:#ff4500;--bg-panel:#
     </div>
 </div>
 
+    <!-- Footer -->
+    <footer class="agency-footer">
+        <div>Docente: <strong>Mg Mario Quiroz 2026</strong>, Instituto de Educación Superior "Diseño y Comunicación"</div>
+    </footer>
+
+</div>
 <!-- Modal Insertar -->
 <div class="modal fade zone-modal" id="insertModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -616,6 +1001,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderCases();
     initHotspotEvents();
     initTooltip();
+    initSchemaZoom();
 });
 
 // ==================== REGISTRO ====================
@@ -1034,6 +1420,185 @@ function deleteHotspot(id, event) {
     showToast('Hotspot Eliminado', 'El punto ha sido removido.', 'warning');
 }
 
+
+
+// ==================== ZOOM Y PAN DEL ESQUEMA ====================
+let schemaScale = 1;
+let schemaMinScale = 0.5;
+let schemaMaxScale = 4;
+let schemaStep = 0.15;
+let schemaPanning = false;
+let schemaPanX = 0;
+let schemaPanY = 0;
+let schemaStartX = 0;
+let schemaStartY = 0;
+
+function schemaZoomIn(e) {
+    if(e) e.stopPropagation();
+    schemaScale = Math.min(schemaMaxScale, schemaScale + schemaStep);
+    applySchemaTransform();
+}
+
+function schemaZoomOut(e) {
+    if(e) e.stopPropagation();
+    schemaScale = Math.max(schemaMinScale, schemaScale - schemaStep);
+    if(schemaScale < 0.55) { schemaScale = 0.5; schemaPanX = 0; schemaPanY = 0; }
+    applySchemaTransform();
+}
+
+function schemaZoomReset(e) {
+    if(e) e.stopPropagation();
+    schemaScale = 1;
+    schemaPanX = 0;
+    schemaPanY = 0;
+    applySchemaTransform();
+}
+
+function applySchemaTransform() {
+    var img = document.getElementById('schema-img');
+    var level = document.getElementById('schema-zoom-level');
+    if(img) {
+        img.style.transform = 'translate3d(' + schemaPanX + 'px, ' + schemaPanY + 'px, 0) scale(' + schemaScale + ')';
+    }
+    if(level) {
+        level.textContent = Math.round(schemaScale * 100) + '%';
+    }
+}
+
+// Wheel zoom
+function initSchemaZoom() {
+    var overlay = document.getElementById('schema-overlay');
+    var img = document.getElementById('schema-img');
+    if(!overlay || !img) return;
+
+    // Wheel zoom sobre la imagen
+    overlay.addEventListener('wheel', function(e) {
+        if(!overlay.classList.contains('visible')) return;
+        e.preventDefault();
+        e.stopPropagation();
+        var delta = e.deltaY > 0 ? -schemaStep : schemaStep;
+        var newScale = Math.max(schemaMinScale, Math.min(schemaMaxScale, schemaScale + delta));
+        schemaScale = newScale;
+        if(schemaScale <= 0.55) { schemaPanX = 0; schemaPanY = 0; }
+        applySchemaTransform();
+    }, {passive:false});
+
+    // Pan / drag — solo cuando el esquema está visible y NO se hace clic en controles
+    overlay.addEventListener('mousedown', function(e) {
+        if(!overlay.classList.contains('visible')) return;
+        if(e.target.closest('.schema-zoom-controls')) return;
+        if(e.target.closest('.hs-user')) return; // no interferir con hotspots
+        schemaPanning = true;
+        schemaStartX = e.clientX - schemaPanX;
+        schemaStartY = e.clientY - schemaPanY;
+        overlay.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if(!schemaPanning) return;
+        e.preventDefault();
+        schemaPanX = e.clientX - schemaStartX;
+        schemaPanY = e.clientY - schemaStartY;
+        applySchemaTransform();
+    });
+
+    document.addEventListener('mouseup', function() {
+        if(!schemaPanning) return;
+        schemaPanning = false;
+        var ov = document.getElementById('schema-overlay');
+        if(ov && ov.classList.contains('visible')) ov.style.cursor = 'grab';
+    });
+
+    // Touch pan (móvil, 1 dedo)
+    overlay.addEventListener('touchstart', function(e) {
+        if(!overlay.classList.contains('visible')) return;
+        if(e.target.closest('.schema-zoom-controls')) return;
+        if(e.touches.length === 1) {
+            schemaPanning = true;
+            schemaStartX = e.touches[0].clientX - schemaPanX;
+            schemaStartY = e.touches[0].clientY - schemaPanY;
+        }
+    }, {passive:false});
+
+    overlay.addEventListener('touchmove', function(e) {
+        if(!schemaPanning || e.touches.length !== 1) return;
+        e.preventDefault();
+        schemaPanX = e.touches[0].clientX - schemaStartX;
+        schemaPanY = e.touches[0].clientY - schemaStartY;
+        applySchemaTransform();
+    }, {passive:false});
+
+    overlay.addEventListener('touchend', function() {
+        schemaPanning = false;
+    });
+
+    // Pinch zoom (móvil, 2 dedos)
+    var initialPinchDistance = null;
+    var initialPinchScale = 1;
+
+    overlay.addEventListener('touchstart', function(e) {
+        if(!overlay.classList.contains('visible')) return;
+        if(e.touches.length === 2) {
+            initialPinchDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialPinchScale = schemaScale;
+        }
+    }, {passive:false});
+
+    overlay.addEventListener('touchmove', function(e) {
+        if(e.touches.length === 2 && initialPinchDistance) {
+            e.preventDefault();
+            var currentDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            var ratio = currentDistance / initialPinchDistance;
+            schemaScale = Math.max(schemaMinScale, Math.min(schemaMaxScale, initialPinchScale * ratio));
+            applySchemaTransform();
+        }
+    }, {passive:false});
+
+    overlay.addEventListener('touchend', function(e) {
+        if(e.touches.length < 2) {
+            initialPinchDistance = null;
+        }
+    });
+
+    overlay.addEventListener('touchcancel', function(e) {
+        initialPinchDistance = null;
+        schemaPanning = false;
+    });
+}
+
+function toggleSchema() {
+    var overlay = document.getElementById('schema-overlay');
+    var btn = document.getElementById('btn-toggle-schema');
+    var zoomControls = document.getElementById('schema-zoom-controls');
+    if (!overlay) return;
+
+    var isVisible = overlay.classList.contains('visible');
+
+    if (!isVisible) {
+        // MOSTRAR
+        overlay.classList.add('visible');
+        btn.classList.add('active');
+        btn.innerHTML = '<i class="bi bi-eye-slash"></i> OCULTAR ESQUEMA';
+        if(zoomControls) zoomControls.classList.add('visible');
+        showToast('Esquema', 'Esquema activado. Botones +/−, scroll del mouse o gestos para escalar. Arrastre para mover.', 'info');
+    } else {
+        // OCULTAR
+        overlay.classList.remove('visible');
+        btn.classList.remove('active');
+        btn.innerHTML = '<i class="bi bi-diagram-3"></i> VER ESQUEMA';
+        if(zoomControls) zoomControls.classList.remove('visible');
+        schemaScale = 1; schemaPanX = 0; schemaPanY = 0;
+        applySchemaTransform();
+    }
+}
+
 function toggleOverlay() {
     var overlay = document.getElementById('pulver-overlay');
     overlay.classList.toggle('visible');
@@ -1254,6 +1819,194 @@ function initTooltip() {
     });
 }
 
+
+// ==================== SOLUCIONES MODELO ====================
+const SOLUTIONS = {
+    1: {
+        orientation: 'right',
+        orientationRationale: 'En el afiche oficial, Ethan Hunt mira hacia la derecha (futuro/avance), simbolizando la proyección hacia la acción inminente y la misión por delante.',
+        titlePosition: 'center',
+        titleRationale: 'El título se sitúa en el centro o eje visual, anclando al espectador en el "Yo" del protagonista como eje de la acción.',
+        keyword: 'Misión',
+        keywordRationale: 'La palabra clave es "Misión" porque todo el discurso visual orbita en torno al cumplimiento de un objetivo trascendental.',
+        q1: 'b',
+        q1Rationale: 'La motivación principal es el descubrimiento de la verdad/destino (b), ya que Ethan Hunt actúa para desenmascarar una conspiración que amenaza el orden global.',
+        q2: 'b',
+        q2Rationale: 'La zona superior representa intelecto, idealismo o poder (b): vehículos aéreos, altura y perspectiva estratégica simbolizan la elevación cognitiva y la ambición.',
+        q3Model: 'El artista coloca elementos de peligro inminente (explosiones, persecuciones) en la zona inferior derecha, proyectando una amenaza futura y material. Por el contrario, la izquierda alberga sombras y figuras secundarias que representan el pasado traumático del protagonista. Esta tensión diagonal fuerza al espectador a leer el afiche como una narrativa temporal: lo que se deja atrás (pasado) versus lo que se enfrenta (futuro).',
+        q4Model: 'Tras aplicar la Matriz de Pulver, identifiqué que los afiches de acción suelen saturar la zona inferior con caos biológico (explosiones, fuego) mientras reservan la superior para la aspiración (vehículos, cielo). Mi percepción cambió al notar que el título siempre funciona como ancla del "Yo" narrativo. Una limitación del modelo es que no contempla elementos diagonales móviles ni la profundidad zonal; además, en culturas con lectura RTL la izquierda podría invertir su significado de pasado/futuro.',
+        hotspots: [
+            {zone:'top', element:'Avión/Helicóptero de combate', interpretation:'Zona superior: representa la aspiración, el intelecto estratégico y la misión elevada. Simboliza el poder aéreo y la trascendencia del conflicto.'},
+            {zone:'bottom', element:'Explosión / ciudad en llamas', interpretation:'Zona inferior: anclaje biológico e instintivo. El caos terrenal materializa la amenaza inminente y la supervivencia.'},
+            {zone:'center', element:'Rostro de Ethan Hunt', interpretation:'Zona central (Yo/Presente): el protagonista como eje gravitacional. La mirada directa genera identificación e inmersión inmediata.'},
+            {zone:'right', element:'Vehículo en movimiento / arma', interpretation:'Zona derecha (Futuro): proyección de la acción que viene. Simboliza el avance inevitable y la resolución del conflicto.'},
+            {zone:'left', element:'Sombra / figura en penumbra', interpretation:'Zona izquierda (Pasado): origen del conflicto, traumas previos o enemigos del pasado que condicionan el presente.'},
+            {zone:'top-right', element:'Paracaidas / salto al vacío', interpretation:'Sup-Der (Expansión): gesto de iniciativa extrema. Representa la voluntad de arriesgarlo todo por la misión.'},
+            {zone:'bottom-left', element:'Restos / escombros', interpretation:'Inf-Izq (Obsesión): residuos del pasado que atrapam al protagonista en un ciclo de repetición compulsiva.'}
+        ]
+    },
+    2: {
+        orientation: 'right',
+        titlePosition: 'top',
+        keyword: 'Destino',
+        q1: 'b', q2: 'b',
+        hotspots: [
+            {zone:'top', element:'Dunas y cielo de Arrakis', interpretation:'Superior: espíritu del desierto, lo trascendental y místico del planeta.'},
+            {zone:'center', element:'Paul Atreides', interpretation:'Centro: el elegido como eje del destino universal.'},
+            {zone:'right', element:'Ejército Fremen', interpretation:'Derecha: futuro, la guerra que se avecina y la liberación.'},
+            {zone:'left', element:'Casa Atreides en ruinas', interpretation:'Izquierda: pasado, la caída de la dinastía y la venganza.'}
+        ],
+        q3Model: 'El afiche de Dune coloca a Paul en el centro como eje del destino, mientras la izquierda muestra el pasado derrumbado (Casa Atreides) y la derecha el ejército Fremen como futuro liberador. La superioridad del cielo de Arrakis eleva el tono místico, mientras la inferioridad del arena ancla el conflicto en lo biológico (supervivencia).',
+        q4Model: 'En los afiches de ciencia ficción, la Matriz de Pulver se intensifica: la verticalidad superior suele representar lo sublime tecnológico o místico, mientras la inferioridad es lo orgánico-hostil. Mi percepción evolucionó al detectar que el centro no siempre es el protagonista, sino a veces el objeto de deseo (la especia). Limitación: el modelo ignora la simetría bilateral como recurso de equilibrio político.'
+    },
+    3: {
+        orientation: 'center',
+        titlePosition: 'top',
+        keyword: 'Consecuencia',
+        q1: 'b', q2: 'b',
+        hotspots: [
+            {zone:'center', element:'Rostro de Oppenheimer', interpretation:'Centro: el científico como Yo atormentado, el peso del conocimiento.'},
+            {zone:'top', element:'Nube atómica / explosión', interpretation:'Superior: la revelación trascendental, el genio y la destrucción elevada.'},
+            {zone:'bottom', element:'Multitud / tribunal', interpretation:'Inferior: lo biológico-social, la humanidad juzgando al creador.'},
+            {zone:'left', element:'Fórmulas / pizarrón', interpretation:'Izquierda: pasado, el origen intelectual de la bomba.'},
+            {zone:'right', element:'Silueta de Truman / política', interpretation:'Derecha: futuro, las consecuencias políticas que se avecinan.'}
+        ],
+        q3Model: 'Oppenheimer usa el espacio para mostrar la fractura entre el intelecto puro (superior: nube atómica, ecuaciones) y la responsabilidad social (inferior: multitud, tribunal). La izquierda alberga el pasado científico idealista, mientras la derecha proyecta el futuro político traumático. El centro es el rostro de Oppenheimer como Yo destrozado por esa tensión.',
+        q4Model: 'Aplicar Pulver a un biopic histórico revela que la zona superior no siempre es positiva: aquí es la destrucción sublime. La inferioridad no es instinto, sino juicio social. Limitación: el modelo binario no captura la complejidad moral del personaje, que habita todas las zonas simultáneamente.'
+    },
+    4: {
+        orientation: 'left',
+        titlePosition: 'bottom',
+        keyword: 'Venganza',
+        q1: 'a', q2: 'b',
+        hotspots: [
+            {zone:'bottom', element:'Gotham / calles oscuras', interpretation:'Inferior: la ciudad como organismo enfermo, lo biológico-corrupto.'},
+            {zone:'top', element:'Murciélago / señal', interpretation:'Superior: el idealismo del símbolo, la aspiración de justicia.'},
+            {zone:'left', element:'Crimen / escena del pasado', interpretation:'Izquierda: el trauma originario, los padres asesinados.'},
+            {zone:'center', element:'Batman de frente', interpretation:'Centro: la identidad fragmentada entre Bruce y el murciélago.'},
+            {zone:'right', element:'Enigma / futuro incierto', interpretation:'Derecha: el futuro como interrogante, el acertijo por resolver.'}
+        ],
+        q3Model: 'The Batman ancla el título en la inferioridad (anclaje terrenal), mientras el murciélago ocupa la superioridad como idealismo. La izquierda está dominada por el pasado criminal (el origen del trauma), y la derecha por el enigma como futuro incierto. Batman en el centro es el Yo que media entre ambas fuerzas.',
+        q4Model: 'En cine noir, la Pulver se invierte: la inferioridad es poderosa (la ciudad controla al héroe) y la superioridad es un escape idealista. Noté que el rostro enmascarado en el centro crea una ambigüedad del Yo que el modelo no resuelve. Limitación: Pulver asume un Yo estable, pero Batman es un sujeto escindido.'
+    },
+    5: {
+        orientation: 'center',
+        titlePosition: 'center',
+        keyword: 'Multiverso',
+        q1: 'b', q2: 'b',
+        hotspots: [
+            {zone:'center', element:'Evelyn Wang con gafas rotas', interpretation:'Centro: el Yo fragmentado, la identidad dispersa en infinitas versiones.'},
+            {zone:'top-left', element:'Versiones alternativas (chef, estrella)', interpretation:'Sup-Izq: represión de los sueños no vividos, lo que pudo ser.'},
+            {zone:'top-right', element:'Bagel cósmico / nihilismo', interpretation:'Sup-Der: expansión del vacío existencial, el todo y la nada.'},
+            {zone:'bottom', element:'Familia / lavandería', interpretation:'Inferior: anclaje biológico, el amor familiar como raíz.'},
+            {zone:'left', element:'IRS / burocracia', interpretation:'Izquierda: pasado opresivo, el origen del conflicto fiscal-existencial.'}
+        ],
+        q3Model: 'Everything Everywhere despliega la tensión pasado/futuro mediante la proliferación de Evelyns: la izquierda muestra la opresión del pasado (IRS, inmigración), mientras la derecha proyecta futuros absurdos (hot dog fingers, estrella de cine). El centro es la Evelyn original que debe elegir entre el nihilismo (sup-der: bagel) y el amor (inferior: familia).',
+        q4Model: 'Este afiche desafía la Matriz de Pulver porque el centro no es un Yo único sino una multiplicidad. Las zonas laterales no son lineales sino paralelas. Limitación: el modelo asume una lectura unidimensional del espacio, pero aquí el espacio es radial y caótico. Pulver no contempla el absurdo como categoría espacial.'
+    },
+    6: {
+        orientation: 'right',
+        titlePosition: 'top',
+        keyword: 'Gloria',
+        q1: 'd', q2: 'b',
+        hotspots: [
+            {zone:'top', element:'Corona imperial / águila', interpretation:'Superior: la gloria, el poder absoluto y la trascendencia histórica.'},
+            {zone:'center', element:'Napoleón a caballo', interpretation:'Centro: el Yo imperial, la voluntad de dominación personificada.'},
+            {zone:'right', element:'Ejército francés avanzando', interpretation:'Derecha: futuro, la expansión militar y la conquista europea.'},
+            {zone:'left', element:'Revolución / guillotina', interpretation:'Izquierda: pasado revolucionario, el origen de su ascenso.'},
+            {zone:'bottom', element:'Campo de batalla / sangre', interpretation:'Inferior: lo biológico de la guerra, la carne y la muerte.'},
+            {zone:'bottom-right', element:'Cañón / artillería', interpretation:'Inf-Der: agresión institucionalizada, la violencia como política.'}
+        ],
+        q3Model: 'El afiche de Napoleón utiliza la diagonal inferior derecha (agresión) para mostrar la artillería como extensión de la voluntad imperial. La izquierda alberga la Revolución como pasado fundacional, mientras la derecha proyecta la conquista de Europa. La superioridad es la corona como ideal de gloria, y la inferioridad es el barro y la sangre de Austerlitz.',
+        q4Model: 'En el cine histórico-épico, Pulver funciona como mapa de poder: la superioridad es siempre aspiración divina, la inferioridad es la carnalidad de la guerra. Sin embargo, noté que las películas de Ridley Scott suelen desplazar el título a la superioridad para imponer autoridad visual. Limitación: el modelo no distingue entre poder legítimo y tiránico; ambos ocupan la misma zona superior.'
+    }
+};
+
+// ==================== RETROALIMENTACIÓN EFECTIVA ====================
+function openFeedbackModal() {
+    if (!currentCase) {
+        showToast('Retroalimentación', 'Abra un caso primero para ver la retroalimentación modelo.', 'warning');
+        return;
+    }
+
+    var sol = SOLUTIONS[currentCase.id];
+    var body = document.getElementById('feedback-body');
+
+    if (!sol) {
+        body.innerHTML = '<p class="text-secondary">Retroalimentación modelo no disponible para este caso.</p>';
+        var modal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+        modal.show();
+        return;
+    }
+
+    var html = '';
+
+    // Header del caso
+    html += '<div class="feedback-section">';
+    html += '<h6><i class="bi bi-film"></i> Caso: ' + currentCase.title + '</h6>';
+    html += '<p style="font-size:.8rem;color:var(--text-secondary);">Esta retroalimentación es una <strong>guía modelo</strong>. Las respuestas válidas pueden variar según la lectura individual, siempre que estén argumentadas con la Matriz de Pulver.</p>';
+    html += '</div>';
+
+    // Paso 2: Orientación
+    html += '<div class="feedback-section">';
+    html += '<h6><span class="badge-solution">PASO 2</span> Escaneo de Orientación</h6>';
+    html += '<p><strong>Respuesta modelo:</strong> <span style="color:var(--accent)">' + sol.orientation + '</span></p>';
+    html += '<div class="model-answer">' + sol.orientationRationale + '</div>';
+    html += '<div class="rationale"><i class="bi bi-info-circle"></i> <strong>Tip pedagógico:</strong> La orientación de la mirada dirige la lectura temporal del espectador. Derecha=futuro, Izquierda=pasado, Arriba=idealismo, Abajo=materialismo.</div>';
+    html += '</div>';
+
+    // Paso 3: Hotspots
+    html += '<div class="feedback-section">';
+    html += '<h6><span class="badge-solution">PASO 3</span> Hotspots Sugeridos (' + sol.hotspots.length + ')</h6>';
+    html += '<ul>';
+    sol.hotspots.forEach(function(h, i) {
+        html += '<li><strong style="color:var(--accent)">#' + (i+1) + ' ' + ZONE_LABELS[h.zone] + ':</strong> <em>' + h.element + '</em><br>' + h.interpretation + '</li>';
+    });
+    html += '</ul>';
+    html += '<div class="rationale"><i class="bi bi-info-circle"></i> <strong>Tip pedagógico:</strong> No es necesario coincidir exactamente en los elementos visuales; lo importante es que la interpretación sea coherente con la zona espacial asignada.</div>';
+    html += '</div>';
+
+    // Paso 4: Título
+    html += '<div class="feedback-section">';
+    html += '<h6><span class="badge-solution">PASO 4</span> Rastreo del Título</h6>';
+    html += '<p><strong>Respuesta modelo:</strong> <span style="color:var(--accent)">' + sol.titlePosition + '</span></p>';
+    html += '<div class="model-answer">' + sol.titleRationale + '</div>';
+    html += '</div>';
+
+    // Paso 5: Palabra clave
+    html += '<div class="feedback-section">';
+    html += '<h6><span class="badge-solution">PASO 5</span> Sello de la Matriz</h6>';
+    html += '<p><strong>Respuesta modelo:</strong> <span style="color:var(--accent)">' + sol.keyword + '</span></p>';
+    html += '<div class="model-answer">' + sol.keywordRationale + '</div>';
+    html += '</div>';
+
+    // Cuestionario P1-P2
+    html += '<div class="feedback-section">';
+    html += '<h6><span class="badge-solution">P1-P2</span> Cuestionario Cerrado</h6>';
+    html += '<p><strong>P1 Motivación:</strong> Opción <span style="color:var(--accent)">' + sol.q1.toUpperCase() + '</span> — ' + sol.q1Rationale + '</p>';
+    html += '<p><strong>P2 Zona Superior:</strong> Opción <span style="color:var(--accent)">' + sol.q2.toUpperCase() + '</span> — ' + sol.q2Rationale + '</p>';
+    html += '</div>';
+
+    // Cuestionario P3
+    html += '<div class="feedback-section">';
+    html += '<h6><span class="badge-solution">P3</span> Análisis Espacial (modelo)</h6>';
+    html += '<div class="model-answer">' + sol.q3Model + '</div>';
+    html += '<div class="rationale"><i class="bi bi-info-circle"></i> <strong>Criterio de evaluación:</strong> Se valora la identificación de al menos dos zonas en tensión, la mención explícita de pasado/futuro y el uso de vocabulario semiológico (significante/significado).</div>';
+    html += '</div>';
+
+    // Cuestionario P4
+    html += '<div class="feedback-section">';
+    html += '<h6><span class="badge-solution">P4</span> Análisis Reflexivo (modelo)</h6>';
+    html += '<div class="model-answer">' + sol.q4Model + '</div>';
+    html += '<div class="rationale"><i class="bi bi-info-circle"></i> <strong>Criterio de evaluación:</strong> Debe incluir: (1) patrones detectados entre afiches, (2) cambio perceptivo personal, (3) al menos una limitación crítica del modelo de Pulver.</div>';
+    html += '</div>';
+
+    body.innerHTML = html;
+
+    var modal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+    modal.show();
+}
+
 // ==================== EXPORTAR ====================
 function generateCSV() {
     if (!currentCase) {
@@ -1348,5 +2101,28 @@ function generatePDF() {
     showToast('PDF Generado', 'Use la función de imprimir a PDF de su navegador.', 'info');
 }
 </script>
+
+<!-- Botón oculto de retroalimentación efectiva -->
+<div class="hidden-feedback-trigger" onclick="openFeedbackModal()" title="Retroalimentación del ejercicio"><span class="clown-icon">🤡</span><span class="trigger-text">RETROALIMENTACIÓN EFECTIVA</span></div>
+
+
+<!-- Modal Retroalimentación Efectiva -->
+<div class="modal fade feedback-modal" id="feedbackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-lightbulb-fill"></i> RETROALIMENTACIÓN EFECTIVA — CASO MODELO</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="feedback-body">
+                <!-- Se inyecta dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-agency btn-sm" data-bs-dismiss="modal"><i class="bi bi-check-lg"></i> ENTENDIDO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
